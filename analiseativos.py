@@ -1,3 +1,169 @@
+# Define a classe FreeFloatEvaluator para avaliar o indicador Free Float
+class FreeFloatEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do Free Float
+    def __init__(self):
+        # Define string multilinha explicando o índice Free Float
+        self.definicao = '''
+        O Free Float é a proporção de ações de uma empresa disponíveis para negociação pública no mercado, excluindo ações detidas por
+        controladores, acionistas estratégicos, diretores ou bloqueadas (ex.: lock-up). Expresso em percentual, é um indicador de liquidez
+        de mercado, refletindo a facilidade de compra e venda da ação. Um Free Float alto sugere maior liquidez e atratividade para investidores,
+        enquanto um Free Float baixo indica menor negociação e maior controle por poucos acionistas, podendo limitar a volatilidade ou o interesse.
+        '''
+        # Define a categoria de agrupamento como "Liquidez de Mercado"
+        self.agrupador = 'Liquidez de Mercado'
+        # Define a fórmula do Free Float
+        self.formula = '''
+        Free Float (%) = (Ações em Circulação - Ações Restritas) / Total de Ações × 100
+        Onde:
+        - Ações em Circulação: Total de ações emitidas disponíveis no mercado
+        - Ações Restritas: Ações detidas por controladores, insiders ou bloqueadas
+        - Total de Ações: Soma de todas as ações emitidas pela empresa
+        '''
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Calcula o Free Float com base no número de ações
+    def calcular_free_float(self, acoes_em_circulacao, acoes_restritas, total_acoes):
+        try:
+            # Verifica se as entradas são numéricas
+            for param, nome in [
+                (acoes_em_circulacao, "Ações em Circulação"),
+                (acoes_restritas, "Ações Restritas"),
+                (total_acoes, "Total de Ações")
+            ]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte parâmetros para float
+            acoes_em_circulacao = float(acoes_em_circulacao)
+            acoes_restritas = float(acoes_restritas)
+            total_acoes = float(total_acoes)
+            # Verifica se o total de ações é maior que zero
+            if total_acoes <= 0:
+                raise ValueError("O total de ações deve ser maior que zero.")
+            # Verifica se as ações restritas são menores ou iguais às ações em circulação
+            if acoes_restritas > acoes_em_circulacao:
+                raise ValueError("As ações restritas não podem exceder as ações em circulação.")
+            # Calcula o Free Float
+            free_float = ((acoes_em_circulacao - acoes_restritas) / total_acoes) * 100
+            return free_float
+        except Exception as e:
+            raise ValueError(f"Erro ao calcular o Free Float: {str(e)}")
+
+    # Avalia o valor do Free Float e retorna um objeto ResultadoIND
+    def avaliar(self, acoes_em_circulacao, acoes_restritas, total_acoes):
+        # Tenta processar o cálculo do Free Float e a avaliação
+        try:
+            # Calcula o Free Float
+            free_float = self.calcular_free_float(acoes_em_circulacao, acoes_restritas, total_acoes)
+            # Verifica se Free Float é menor que 0%, indicando erro nos dados
+            if free_float < 0:
+                # Retorna ResultadoIND para Free Float inválido
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='Free Float < 0%',
+                    descricao='Um Free Float negativo é inválido e indica erro nos dados de entrada, como ações restritas maiores que as ações em circulação. Isso compromete a análise de liquidez da ação.',
+                    riscos='Risco de dados inconsistentes ou má estrutura acionária. Pode haver dificuldades em avaliar a liquidez de mercado.',
+                    referencia='Avalie evaluate_liquidez_media_diaria para liquidez, evaluate_beta para risco e evaluate_p_vpa para valuation.',
+                    recomendacao='Revise os dados de entrada antes de prosseguir com a análise. Evite decisões de investimento até corrigir os dados.'
+                )
+            # Verifica se Free Float está entre 0 e 20%, indicando baixa liquidez
+            elif 0 <= free_float < 20:
+                # Retorna ResultadoIND para baixa liquidez
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='0 <= Free Float < 20%',
+                    descricao='O Free Float é baixo, indicando liquidez limitada no mercado. Comum em empresas com forte controle acionário ou pequena capitalização, sugere dificuldade para negociar grandes volumes e menor atratividade para investidores institucionais.',
+                    riscos='Risco de baixa liquidez, dificultando entrada e saída de posições. Pode haver maior volatilidade em preços ou manipulação por poucos acionistas.',
+                    referencia='Compare com evaluate_liquidez_media_diaria para liquidez, evaluate_beta para risco e evaluate_div_liquida_pl para alavancagem.',
+                    recomendacao='Evite investir devido à baixa liquidez, a menos que tolere riscos elevados. Priorize empresas com maior Free Float ou volume de negociação.'
+                )
+            # Verifica se Free Float está entre 20% e 50%, indicando liquidez moderada
+            elif 20 <= free_float <= 50:
+                # Retorna ResultadoIND para liquidez moderada
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='20 <= Free Float <= 50%',
+                    descricao='O Free Float indica liquidez moderada, típico de empresas com equilíbrio entre controle acionário e negociação pública. Sugere capacidade razoável de negociação, mas pode não atrair grandes investidores institucionais.',
+                    riscos='Risco de volatilidade moderada ou dificuldade em negociar grandes volumes. Pode haver influência de acionistas controladores nas decisões.',
+                    referencia='Analise evaluate_liquidez_media_diaria para liquidez, evaluate_p_ebitda para valuation e evaluate_roe para rentabilidade.',
+                    recomendacao='Considere investir, mas avalie o volume de negociação e a governança corporativa. Boa opção para investidores moderados.'
+                )
+            # Verifica se Free Float está entre 50% e 80%, indicando alta liquidez
+            elif 50 < free_float <= 80:
+                # Retorna ResultadoIND para alta liquidez
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='50 < Free Float <= 80%',
+                    descricao='O Free Float é alto, indicando boa liquidez no mercado. Comum em empresas bem estabelecidas ou de grande capitalização, sugere facilidade de negociação e atratividade para investidores institucionais.',
+                    riscos='Risco de maior exposição a flutuações de mercado devido à alta negociação. Pode haver menor controle acionário, impactando decisões estratégicas.',
+                    referencia='Verifique evaluate_beta para risco, evaluate_fcd para valuation e evaluate_margem_liquida para lucratividade.',
+                    recomendacao='Considere investir, especialmente para portfólios diversificados. Boa opção para investidores que buscam liquidez e estabilidade.'
+                )
+            # Verifica se Free Float excede 80%, indicando liquidez excepcional
+            elif free_float > 80:
+                # Retorna ResultadoIND para liquidez excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='Free Float > 80%',
+                    descricao='O Free Float é extremamente alto, indicando liquidez excepcional. Típico de empresas de grande capitalização ou com ampla dispersão acionária, sugere alta facilidade de negociação e forte interesse de investidores institucionais.',
+                    riscos='Risco de alta volatilidade em cenários de mercado turbulentos. Pode haver menor influência de acionistas estratégicos, afetando a governança.',
+                    referencia='Avalie evaluate_liquidez_media_diaria para liquidez, evaluate_wacc para custo de capital e evaluate_p_vpa para valuation.',
+                    recomendacao='Considere investir, mas diversifique para mitigar riscos de mercado. Priorize empresas com fundamentos sólidos e boa governança.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o Free Float: {mensagem}.
+                Verifique os dados de entrada (ações em circulação, ações restritas, total de ações) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
 # Define a classe CAGRLucrosEvaluator para avaliar o indicador CAGR de Lucros 5 Anos
 class CAGRLucrosEvaluator:
     # Construtor que inicializa definição, agrupador e descrição do CAGR de Lucros
