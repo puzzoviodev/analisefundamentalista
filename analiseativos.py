@@ -1,3 +1,143 @@
+# Define a classe TagAlongEvaluator para avaliar o indicador Tag Along
+class TagAlongEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do Tag Along
+    def __init__(self):
+        # Define string multilinha explicando o índice Tag Along
+        self.definicao = '''
+        O Tag Along é um mecanismo de proteção aos acionistas minoritários que garante o direito de vender suas ações nas mesmas condições
+        (preço e termos) oferecidas ao controlador em caso de venda do controle acionário. Expresso como percentual do preço pago por ação ao
+        controlador, é previsto no estatuto da empresa ou na legislação (ex.: Lei das S.A. no Brasil, que exige 80% para empresas listadas em
+        alguns segmentos). Um Tag Along alto reflete maior proteção aos minoritários, enquanto um Tag Along baixo ou inexistente indica maior risco.
+        '''
+        # Define a categoria de agrupamento como "Governança Corporativa"
+        self.agrupador = 'Governança Corporativa'
+        # Define a fórmula do Tag Along
+        self.formula = '''
+        Tag Along (%) = Percentual do preço por ação pago ao controlador garantido aos minoritários
+        Observação: O Tag Along é uma informação estatutária ou regulatória, geralmente definida como 0%, 80%, 100% ou outro percentual específico.
+        '''
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Valida o percentual de Tag Along
+    def validar_tag_along(self, tag_along):
+        try:
+            # Verifica se o Tag Along é numérico
+            if not isinstance(tag_along, (int, float)) and not (isinstance(tag_along, str) and tag_along.replace('.', '', 1).isdigit()):
+                raise ValueError("O valor do Tag Along deve ser numérico.")
+            # Converte para float
+            tag_along = float(tag_along)
+            # Verifica se o Tag Along está entre 0% e 100%
+            if tag_along < 0 or tag_along > 100:
+                raise ValueError("O Tag Along deve estar entre 0% e 100%.")
+            return tag_along
+        except Exception as e:
+            raise ValueError(f"Erro ao validar o Tag Along: {str(e)}")
+
+    # Avalia o valor do Tag Along e retorna um objeto ResultadoIND
+    def avaliar(self, tag_along):
+        # Tenta processar a avaliação do Tag Along
+        try:
+            # Valida o Tag Along
+            tag_along = self.validar_tag_along(tag_along)
+            # Verifica se Tag Along é 0%, indicando ausência de proteção
+            if tag_along == 0:
+                # Retorna ResultadoIND para ausência de Tag Along
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='Tag Along = 0%',
+                    descricao='A ausência de Tag Along indica nenhuma proteção aos acionistas minoritários em caso de venda do controle acionário. Comum em empresas com baixa governança ou fora de segmentos regulados, sugere alto risco para investidores minoritários.',
+                    riscos='Risco de perda significativa em cenários de venda de controle, com minoritários recebendo preços inferiores ou nenhum pagamento. Pode indicar má governança corporativa.',
+                    referencia='Avalie evaluate_free_float para liquidez, evaluate_div_liquida_pl para alavancagem e evaluate_roe para rentabilidade.',
+                    recomendacao='Evite investir devido à falta de proteção aos minoritários. Priorize empresas com melhores práticas de governança.'
+                )
+            # Verifica se Tag Along está entre 1% e 79%, indicando proteção parcial insuficiente
+            elif 1 <= tag_along < 80:
+                # Retorna ResultadoIND para proteção parcial insuficiente
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='1% <= Tag Along < 80%',
+                    descricao='O Tag Along oferece proteção parcial, mas abaixo do padrão de mercado (ex.: 80% exigido pela B3 para o Novo Mercado). Sugere proteção limitada aos minoritários, com risco de desvalorização em caso de venda de controle.',
+                    riscos='Risco de receber preços significativamente inferiores em uma venda de controle. Pode indicar governança corporativa fraca ou controle concentrado.',
+                    referencia='Compare com evaluate_free_float para liquidez, evaluate_beta para risco e evaluate_p_vpa para valuation.',
+                    recomendacao='Considere investir com cautela, priorizando empresas com Tag Along mais alto ou melhores práticas de governança.'
+                )
+            # Verifica se Tag Along está entre 80% e 99%, indicando proteção padrão
+            elif 80 <= tag_along <= 99:
+                # Retorna ResultadoIND para proteção padrão
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='80% <= Tag Along <= 99%',
+                    descricao='O Tag Along oferece proteção padrão aos minoritários, alinhado com exigências de mercados como o Novo Mercado da B3. Comum em empresas com governança sólida, sugere segurança razoável em cenários de venda de controle.',
+                    riscos='Risco de proteção não total, com possíveis diferenças nos termos oferecidos aos minoritários. Pode haver dependência de outros fatores de governança.',
+                    referencia='Analise evaluate_free_float para liquidez, evaluate_p_ebitda para valuation e evaluate_margem_liquida para lucratividade.',
+                    recomendacao='Considere investir, mas avalie outros aspectos de governança e liquidez. Boa opção para investidores moderados.'
+                )
+            # Verifica se Tag Along é 100%, indicando proteção total
+            elif tag_along == 100:
+                # Retorna ResultadoIND para proteção total
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='Tag Along = 100%',
+                    descricao='O Tag Along de 100% oferece proteção total aos acionistas minoritários, garantindo as mesmas condições do controlador em uma venda de controle. Típico de empresas com governança exemplar, sugere alta segurança para investidores minoritários.',
+                    riscos='Risco mínimo relacionado ao Tag Along, mas outros fatores de governança ou mercado podem impactar o investimento.',
+                    referencia='Verifique evaluate_free_float para liquidez, evaluate_fcd para valuation e evaluate_roe para rentabilidade.',
+                    recomendacao='Considere investir, especialmente para portfólios que valorizam governança sólida. Boa opção para investidores que buscam segurança.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o Tag Along: {mensagem}.
+                Verifique o dado de entrada (percentual de Tag Along) e assegure que seja um valor numérico válido entre 0% e 100%.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
 # Define a classe FreeFloatEvaluator para avaliar o indicador Free Float
 class FreeFloatEvaluator:
     # Construtor que inicializa definição, agrupador e descrição do Free Float
