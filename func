@@ -1,0 +1,15 @@
+Funções disponíveis: ['evaluate_ativo_circulante', 'evaluate_ativos',
+'evaluate_capex_receita', 'evaluate_cobertura_juros', 'evaluate_crescimento_ebitda',
+ 'evaluate_crescimento_lucro', 'evaluate_crescimento_lucro_liquido', 'evaluate_crescimento_margem_lucro_bruto',
+ 'evaluate_crescimento_receita', 'evaluate_debt_equity', 'evaluate_disponibilidade', 'evaluate_divida_ativo',
+ 'evaluate_divida_bruta', 'evaluate_divida_bruta_ebitda', 'evaluate_divida_ebit', 'evaluate_divida_liquida',
+ 'evaluate_divida_liquida_ebitda', 'evaluate_divida_liquida_patrimonio', 'evaluate_dividend_payout',
+  'evaluate_dividend_yield', 'evaluate_ev_ebit', 'evaluate_evebitda', 'evaluate_free_cash_flow_yield',
+  'evaluate_giro_ativos', 'evaluate_liquidez_corrente', 'evaluate_liquidez_imediata', 'evaluate_liquidez_media_diaria',
+   'evaluate_lpa', 'evaluate_margem_bruta', 'evaluate_margem_ebitda', 'evaluate_margem_liquida_crescimento',
+    'evaluate_margem_operacional', 'evaluate_p_ativo', 'evaluate_p_ativo_circ_liq', 'evaluate_p_ebitda', 'evaluate_p_l',
+     'evaluate_p_vp', 'evaluate_passivos_ativos', 'evaluate_patrimonio_liquido', 'evaluate_payout_ratio', 'evaluate_pebit',
+     'evaluate_peg_ratio', 'evaluate_pl', 'evaluate_pl_ativos', 'evaluate_psr', 'evaluate_roa', 'evaluate_roe', 'evaluate_roic',
+      'evaluate_vpa']
+
+Process finished with exit code 0

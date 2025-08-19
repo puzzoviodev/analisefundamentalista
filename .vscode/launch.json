@@ -1,0 +1,50 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Main Pipeline",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "run.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Rich's Command line interface",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "run_rich.py",
+      "args": "--ticker aces3",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Rich's CMD: List All Companies",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "run_rich.py",
+      "args": "--list companies",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Rich's CMD: List All Funds",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "run_rich.py",
+      "args": "--list funds",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Run Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "args": "-t VALE3",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceRoot}" }
+    }
+  ]
+}

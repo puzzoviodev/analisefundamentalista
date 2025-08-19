@@ -1,0 +1,996 @@
+[
+    {
+        "Indicador": "Dívida Líquida/EBIT",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Dívida líquida negativa pode indicar EBIT negativo (prejuízo operacional grave) ou excesso de caixa líquido. EBIT negativo, comum em empresas em crise (ex.: OI, OIBR3), reflete ineficiência operacional e risco de insolvência. Excesso de caixa, como em empresas de tecnologia (ex.: Nubank), pode indicar ineficiência na alocação de capital, com caixa ocioso não reinvestido. Em 2025, com juros altos, EBIT negativo agrava a pressão financeira. Investidores devem analisar a causa (EBIT negativo vs. caixa elevado) e evitar empresas sem plano claro de recuperação ou alocação eficiente.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBIT",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 4x",
+        "Interpretação": "Endividamento crítico, leva mais de 4 anos de EBIT para quitar a dívida líquida, indicando alavancagem extrema. Comum em empresas em crise ou setores cíclicos (ex.: construção). Aumenta vulnerabilidade a choques econômicos ou aumento de juros. Investidores devem evitar, salvo reestruturação robusta com forte geração de caixa futura.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBIT",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "3 a 4x",
+        "Interpretação": "Endividamento elevado, leva 3-4 anos de EBIT para pagar a dívida, um nível alto para a maioria dos setores. Comum em setores intensivos em capital (ex.: infraestrutura). Investidores devem analisar cobertura de juros e estabilidade do EBIT para avaliar riscos em cenários adversos.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBIT",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "1,5 a 3x",
+        "Interpretação": "Endividamento moderado, pagável em 1,5-3 anos de EBIT, aceitável em setores estáveis (ex.: utilities). Investidores devem verificar consistência do EBIT e fluxo de caixa livre para garantir que a alavancagem não comprometa a operação.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBIT",
+        "Classificação": "Bom",
+        "Faixa de Referência": "0 a 1,5x",
+        "Interpretação": "Endividamento controlado, dívida quitável em menos de 1,5 anos de EBIT, indicando baixa alavancagem. Comum em empresas maduras com forte geração de caixa (ex.: Ambev). Sinal de estabilidade, mas deve-se avaliar subinvestimento.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBIT",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Caixa líquido supera dívida, refletindo forte saúde financeira. Comum em empresas de tecnologia ou com reservas elevadas (ex.: Nubank). Investidores devem investigar alocação do caixa (ex.: reinvestimento, dividendos) para evitar ineficiências.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBITDA",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo operacional, com incapacidade de gerar caixa operacional, indicando problemas estruturais graves. Comum em empresas em crise (ex.: OIBR3) ou setores com alta concorrência (ex.: varejo, CRFB3). Em 2025, com juros de 10-12%, a margem negativa agrava a pressão financeira, dificultando a cobertura de despesas. Riscos incluem insolvência, perda de market share ou aumento de custos fixos. Analise o fluxo de caixa operacional (FCO < 0 é preocupante) e a composição dos custos operacionais. Verifique balanços trimestrais e planos estratégicos para avaliar viabilidade. Setores cíclicos (ex.: construção, MRVE3) podem ter margens negativas temporariamente, mas exigem recuperação clara. Compare com peers (ex.: varejo ~10%) para avaliar gravidade. Evite empresas com EBITDA negativo recorrente ou sem estratégia definida. Oportunidades surgem em reestruturações robustas com potencial de turnaround.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBITDA",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 3,5x",
+        "Interpretação": "Endividamento crítico, leva mais de 3,5 anos de EBITDA para quitar a dívida líquida, indicando alavancagem extrema. Aumenta vulnerabilidade a recessões ou aumento de juros. Investidores devem evitar, salvo recuperação clara com forte geração de caixa.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBITDA",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "2,5 a 3,5x",
+        "Interpretação": "Endividamento elevado, leva 2,5-3,5 anos de EBITDA para pagar a dívida. Comum em setores cíclicos (ex.: commodities). Investidores devem analisar cobertura de juros, volatilidade do EBITDA e riscos macroeconômicos.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBITDA",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "1 a 2,5x",
+        "Interpretação": "Endividamento moderado, pagável em 1-2,5 anos de EBITDA, aceitável em setores com investimentos moderados (ex.: varejo). Investidores devem monitorar tendência do EBITDA e gestão de dívidas para garantir sustentabilidade.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBITDA",
+        "Classificação": "Bom",
+        "Faixa de Referência": "0 a 1x",
+        "Interpretação": "Endividamento baixo, dívida quitável rapidamente, indicando forte capacidade de pagamento. Comum em empresas com margens altas (ex.: Weg). Sinal positivo, mas deve-se avaliar se limita crescimento.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Dívida Líquida/EBITDA",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Caixa líquido excede dívida, sugerindo forte geração de caixa ou reservas elevadas. Comum em setores de alto crescimento (ex.: tecnologia). Investidores devem verificar alocação do caixa para evitar ineficiências (ex.: caixa ocioso).",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Dívida Líquida/Patrimônio Líquido",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Patrimônio líquido negativo, passivos superam ativos, indicando risco crítico de insolvência. Comum em empresas em crise (ex.: OI). Investidores devem exigir plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Dívida Líquida/Patrimônio Líquido",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 1",
+        "Interpretação": "Alavancagem crítica, dívida líquida excede o patrimônio líquido, indicando dependência extrema de financiamento externo. Comum em empresas em crise (ex.: OI). Investidores devem evitar, salvo reestruturação com forte potencial de recuperação.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Dívida Líquida/Patrimônio Líquido",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "0,7 a 1",
+        "Interpretação": "Alavancagem elevada, dívida representa 70-100% do patrimônio líquido, um nível alto para a maioria dos setores. Investidores devem analisar capacidade de geração de lucro e prazos da dívida para avaliar sustentabilidade financeira.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Dívida Líquida/Patrimônio Líquido",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "0,3 a 0,7",
+        "Interpretação": "Alavancagem moderada, dívida é 30-70% do patrimônio líquido, aceitável em setores como indústria. Investidores devem monitorar cobertura de juros e estabilidade do fluxo de caixa para garantir solvência.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Dívida Líquida/Patrimônio Líquido",
+        "Classificação": "Bom",
+        "Faixa de Referência": "0 a 0,3",
+        "Interpretação": "Baixa alavancagem, estrutura financeira sólida, indicando empresa bem capitalizada. Comum em setores estáveis (ex.: utilities). Sinal de segurança, mas deve-se avaliar se a baixa dívida limita crescimento.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Dívida Líquida/Patrimônio Líquido",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Caixa líquido excede dívida, indicando altíssima capitalização. Comum em empresas com reservas elevadas (ex.: Weg). Investidores devem verificar alocação do caixa para evitar ineficiências.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Dividend Yield (DY)",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "0",
+        "Interpretação": "Sem pagamento de dividendos, indicando reinvestimento total dos lucros (ex.: startups) ou prejuízo financeiro. Investidores focados em renda devem evitar, mas podem considerar se o foco é crescimento de longo prazo.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Dividend Yield (DY)",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "0",
+        "Interpretação": "Sem pagamento de dividendos, indicando reinvestimento total dos lucros (ex.: startups) ou prejuízo financeiro. Investidores focados em renda devem evitar, mas podem considerar se o foco é crescimento de longo prazo.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Dividend Yield (DY)",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "0,1 a 2%",
+        "Interpretação": "Retorno baixo, pouco atrativo para investidores de dividendos. Comum em empresas de crescimento (ex.: Nubank). Investidores devem focar no potencial de valorização das ações em vez de dividendos.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Dividend Yield (DY)",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "2 a 4%",
+        "Interpretação": "Retorno moderado, oferece equilíbrio entre dividendos e reinvestimento. Comum em empresas maduras (ex.: Ambev). Investidores devem verificar sustentabilidade do payout e consistência dos lucros.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Dividend Yield (DY)",
+        "Classificação": "Bom",
+        "Faixa de Referência": "4 a 6%",
+        "Interpretação": "Retorno atrativo, bom para investidores de renda. Comum em setores como utilities e bancos (ex.: Engie). Investidores devem confirmar sustentabilidade do fluxo de caixa livre e política de dividendos.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Dividend Yield (DY)",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 6%",
+        "Interpretação": "Alto retorno, muito atrativo, mas pode indicar risco de insustentabilidade, especialmente com lucros voláteis. Investidores devem analisar payout ratio e geração de caixa para garantir continuidade dos dividendos.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "EV/EBIT",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo operacional, com operação não rentável, indicando ineficiência grave ou investimentos pesados. Comum em empresas em crise (ex.: OIBR3) ou setores com alta concorrência (ex.: varejo, CRFB3). Em 2025, com juros de 10-12%, a margem negativa agrava a pressão financeira, dificultando a cobertura de despesas. Riscos incluem insolvência, perda de market share ou aumento de custos fixos. Analise o fluxo de caixa operacional (FCO < 0 é preocupante) e a composição dos custos operacionais. Verifique balanços trimestrais e planos estratégicos para avaliar viabilidade. Setores cíclicos (ex.: construção, MRVE3) podem ter margens negativas temporariamente, mas exigem recuperação clara. Compare com peers (ex.: varejo ~5%) para avaliar gravidade. Evite empresas com EBIT negativo recorrente ou sem estratégia definida. Oportunidades surgem em reestruturações robustas com potencial de turnaround.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "EV/EBIT",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 15x",
+        "Interpretação": "Empresa extremamente cara, EV é mais de 15 vezes o EBIT, sugerindo expectativas irreais de crescimento ou sobrevalorização. Comum em setores de tecnologia em bolha. Investidores devem comparar com peers e avaliar crescimento projetado.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "EV/EBIT",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "12 a 15x",
+        "Interpretação": "Empresa cara, múltiplo elevado, comum em setores de crescimento (ex.: saúde). Investidores devem analisar se o crescimento futuro justifica o preço e comparar com média setorial para evitar sobrepreço.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "EV/EBIT",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "8 a 12x",
+        "Interpretação": "Avaliação razoável, equilibrada para empresas maduras com crescimento moderado (ex.: indústria). Investidores devem verificar consistência do EBIT e perspectivas de crescimento para confirmar atratividade.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "EV/EBIT",
+        "Classificação": "Bom",
+        "Faixa de Referência": "4 a 8x",
+        "Interpretação": "Subvalorizada, EV abaixo de 8x o EBIT indica empresa barata, com potencial de valorização. Comum em setores cíclicos em recuperação (ex.: mineração). Investidores devem confirmar fluxo de caixa livre e tendências setoriais.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "EV/EBIT",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "0 a 4x",
+        "Interpretação": "Extremamente subvalorizada, EV muito baixo em relação ao EBIT, sugerindo oportunidade ou EBIT inflado. Investidores devem verificar fluxo de caixa livre e sustentabilidade do EBIT para confirmar oportunidade.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "EV/EBITDA",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo operacional, com incapacidade de gerar caixa operacional, indicando problemas estruturais graves. Comum em empresas em crise (ex.: OIBR3) ou setores com alta concorrência (ex.: varejo, CRFB3). Em 2025, com juros de 10-12%, a margem negativa agrava a pressão financeira, dificultando a cobertura de despesas. Riscos incluem insolvência, perda de market share ou aumento de custos fixos. Analise o fluxo de caixa operacional (FCO < 0 é preocupante) e a composição dos custos operacionais. Verifique balanços trimestrais e planos estratégicos para avaliar viabilidade. Setores cíclicos (ex.: construção, MRVE3) podem ter margens negativas temporariamente, mas exigem recuperação clara. Compare com peers (ex.: varejo ~10%) para avaliar gravidade. Evite empresas com EBITDA negativo recorrente ou sem estratégia definida. Oportunidades surgem em reestruturações robustas com potencial de turnaround.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "EV/EBITDA",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 12x",
+        "Interpretação": "Empresa extremamente cara, EV é mais de 12 vezes o EBITDA, sugerindo sobrevalorização. Comum em setores de tecnologia (ex.: Nubank). Investidores devem comparar com peers e avaliar crescimento projetado.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "EV/EBITDA",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "10 a 12x",
+        "Interpretação": "Empresa cara, comum em setores de crescimento (ex.: saúde). Investidores devem analisar se o crescimento futuro justifica o preço e comparar com média setorial.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "EV/EBITDA",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "6 a 10x",
+        "Interpretação": "Avaliação equilibrada, comum em setores maduros (ex.: varejo). Investidores devem verificar consistência do EBITDA e perspectivas de crescimento.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "EV/EBITDA",
+        "Classificação": "Bom",
+        "Faixa de Referência": "3 a 6x",
+        "Interpretação": "Subvalorizada, oportunidade em setores cíclicos (ex.: mineração). Investidores devem confirmar fluxo de caixa livre e tendências setoriais.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "EV/EBITDA",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "0 a 3x",
+        "Interpretação": "Extremamente subvalorizada, sugere oportunidade ou EBITDA inflado. Investidores devem verificar fluxo de caixa livre e sustentabilidade do EBITDA.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Giro do Ativo",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Receita negativa ou ativos mal contabilizados, indicando problemas estruturais graves ou falha contábil. Comum em empresas em crise severa (ex.: OIBR3). Investidores devem evitar, salvo recuperação robusta com plano claro de reestruturação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Giro do Ativo",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Abaixo de 0,2",
+        "Interpretação": "Baixa eficiência, ativos subutilizados, comum em empresas em crise (ex.: OIBR3) ou setores em baixa (ex.: siderurgia). Investidores devem verificar composição dos ativos e fluxo de caixa operacional.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Giro do Ativo",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "0,2 a 0,4",
+        "Interpretação": "Eficiência limitada, comum em setores cíclicos (ex.: GGBR4). Investidores devem investigar potencial de melhoria operacional e aumento de vendas.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Giro do Ativo",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "0,4 a 0,8",
+        "Interpretação": "Eficiência moderada, aceitável em setores industriais (ex.: CSNA3). Investidores devem analisar tendência da receita e composição dos ativos.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Giro do Ativo",
+        "Classificação": "Bom",
+        "Faixa de Referência": "0,8 a 1,2",
+        "Interpretação": "Boa eficiência, ativos bem utilizados, comum em varejo (ex.: LREN3). Investidores devem confirmar sustentabilidade da receita.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Giro do Ativo",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 1,2",
+        "Interpretação": "Alta eficiência, excelente utilização dos ativos, comum em setores dinâmicos (ex.: MGLU3). Investidores devem verificar consistência frente a riscos setoriais.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Liquidez Corrente",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Passivo circulante excede ativo circulante de forma crítica, indicando insolvência iminente. Comum em empresas em crise severa (ex.: OIBR3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Liquidez Corrente",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Abaixo de 0,8",
+        "Interpretação": "Incapacidade de cobrir obrigações de curto prazo, indicando risco de insolvência. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo reestruturação robusta.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Liquidez Corrente",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "0,8 a 1,2",
+        "Interpretação": "Liquidez limitada, risco moderado de dificuldades financeiras. Investidores devem analisar composição do ativo circulante e fluxo de caixa operacional.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Liquidez Corrente",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "1,2 a 1,8",
+        "Interpretação": "Liquidez razoável, aceitável em setores estáveis (ex.: ABEV3). Investidores devem verificar qualidade dos ativos circulantes (ex.: estoques, recebíveis).",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Liquidez Corrente",
+        "Classificação": "Bom",
+        "Faixa de Referência": "1,8 a 2,5",
+        "Interpretação": "Boa liquidez, capacidade sólida de cobrir obrigações de curto prazo. Comum em empresas maduras (ex.: WEGE3). Investidores devem confirmar sustentabilidade do fluxo de caixa.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Liquidez Corrente",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 2,5",
+        "Interpretação": "Alta liquidez, forte capacidade de pagamento, mas pode indicar caixa ocioso. Comum em tecnologia (ex.: TOTS3). Investidores devem avaliar alocação de capital.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "LPA",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo por ação, indicando problemas operacionais ou financeiros graves. Comum em empresas em crise ou com investimentos pesados (ex.: OI). Investidores devem analisar plano de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "LPA",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "0 a 0,1",
+        "Interpretação": "Lucro por ação muito baixo, indicando rentabilidade limitada. Comum em setores competitivos (ex.: varejo). Investidores devem investigar potencial de melhoria.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "LPA",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "0,1 a 0,5",
+        "Interpretação": "Lucro baixo, desempenho fraco, comum em empresas em crescimento ou setores cíclicos. Investidores devem analisar tendência do lucro e riscos setoriais.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "LPA",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "0,5 a 1",
+        "Interpretação": "Lucro moderado, desempenho razoável, aceitável em setores maduros (ex.: indústria). Investidores devem verificar sustentabilidade do lucro.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "LPA",
+        "Classificação": "Bom",
+        "Faixa de Referência": "1 a 2",
+        "Interpretação": "Bom lucro por ação, desempenho sólido, comum em setores estáveis (ex.: bancos). Investidores devem confirmar consistência do lucro.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "LPA",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 2",
+        "Interpretação": "Lucro excepcional, refletindo forte rentabilidade. Comum em setores de alta margem (ex.: tecnologia). Investidores devem verificar sustentabilidade frente a riscos setoriais.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Margem Bruta",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Custo dos produtos vendidos excede a receita, indicando ineficiência grave ou preços insustentáveis. Comum em empresas em crise (ex.: OIBR3) ou setores com alta concorrência (ex.: varejo, CRFB3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Margem Bruta",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Abaixo de 15%",
+        "Interpretação": "Baixa margem, indicando ineficiência na produção ou vendas. Comum em setores competitivos (ex.: varejo, MGLU3). Investidores devem analisar composição dos custos e potencial de melhoria.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Margem Bruta",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "15 a 25%",
+        "Interpretação": "Margem limitada, comum em setores com alta concorrência (ex.: CRFB3). Investidores devem investigar estratégias de diferenciação ou redução de custos.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Margem Bruta",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "25 a 40%",
+        "Interpretação": "Margem razoável, aceitável em setores industriais (ex.: CSNA3). Investidores devem verificar sustentabilidade da margem e poder de precificação.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Margem Bruta",
+        "Classificação": "Bom",
+        "Faixa de Referência": "40 a 60%",
+        "Interpretação": "Boa margem, indicando eficiência sólida. Comum em setores com barreiras de entrada (ex.: ABEV3). Investidores devem confirmar consistência da margem.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Margem Bruta",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 60%",
+        "Interpretação": "Alta margem, desempenho excepcional, comum em setores de alto valor agregado (ex.: tecnologia, TOTS3). Investidores devem verificar proteção contra concorrência.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Margem EBIT",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo operacional, com operação não rentável, indicando ineficiência grave ou investimentos pesados. Comum em empresas em crise (ex.: OIBR3) ou setores com alta concorrência (ex.: varejo, CRFB3). Em 2025, com juros de 10-12%, a margem negativa agrava a pressão financeira, dificultando a cobertura de despesas. Riscos incluem insolvência, perda de market share ou aumento de custos fixos. Analise o fluxo de caixa operacional (FCO < 0 é preocupante) e a composição dos custos operacionais. Verifique balanços trimestrais e planos estratégicos para avaliar viabilidade. Setores cíclicos (ex.: construção, MRVE3) podem ter margens negativas temporariamente, mas exigem recuperação clara. Compare com peers (ex.: varejo ~5%) para avaliar gravidade. Evite empresas com EBIT negativo recorrente ou sem estratégia definida. Oportunidades surgem em reestruturações robustas com potencial de turnaround.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Margem EBIT",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "0 a 5%",
+        "Interpretação": "Baixa rentabilidade operacional, indicando eficiência limitada. Comum em setores competitivos ou cíclicos (ex.: varejo, MGLU3). Investidores devem analisar potencial de melhoria operacional e redução de custos.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Margem EBIT",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "5 a 15%",
+        "Interpretação": "Rentabilidade operacional limitada, comum em setores com margens moderadas (ex.: indústria, GGBR4). Investidores devem verificar tendência do EBIT e riscos setoriais.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Margem EBIT",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "15 a 25%",
+        "Interpretação": "Rentabilidade moderada, desempenho razoável, aceitável em setores com margens moderadas (ex.: varejo, LREN3). Investidores devem analisar sustentabilidade do EBIT e concorrência.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Margem EBIT",
+        "Classificação": "Bom",
+        "Faixa de Referência": "25 a 35%",
+        "Interpretação": "Boa rentabilidade operacional, desempenho sólido, comum em setores com barreiras de entrada (ex.: utilities, CPFE3). Investidores devem confirmar consistência do EBIT.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Margem EBIT",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 35%",
+        "Interpretação": "Alta rentabilidade operacional, desempenho excepcional, comum em setores de alta margem (ex.: tecnologia, TOTS3). Investidores devem verificar proteção contra concorrência e sustentabilidade.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Margem EBITDA",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo operacional, com incapacidade de gerar caixa operacional, indicando problemas estruturais graves. Comum em empresas em crise (ex.: OIBR3) ou setores com alta concorrência (ex.: varejo, CRFB3). Em 2025, com juros de 10-12%, a margem negativa agrava a pressão financeira, dificultando a cobertura de despesas. Riscos incluem insolvência, perda de market share ou aumento de custos fixos. Analise o fluxo de caixa operacional (FCO < 0 é preocupante) e a composição dos custos operacionais. Verifique balanços trimestrais e planos estratégicos para avaliar viabilidade. Setores cíclicos (ex.: construção, MRVE3) podem ter margens negativas temporariamente, mas exigem recuperação clara. Compare com peers (ex.: varejo ~10%) para avaliar gravidade. Evite empresas com EBITDA negativo recorrente ou sem estratégia definida. Oportunidades surgem em reestruturações robustas com potencial de turnaround.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Margem EBITDA",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "0 a 10%",
+        "Interpretação": "Baixa geração de caixa, com eficiência limitada, comum em setores intensivos em capital (ex.: infraestrutura, CMIG4). Em 2025, com custos elevados, essa faixa indica desafios para melhorar a eficiência sem aumento de preços ou redução de custos fixos. Investidores devem investigar o potencial de melhoria operacional (ex.: automação, corte de despesas) e o poder de precificação. Riscos incluem concorrência agressiva, aumento de insumos ou queda de demanda. Oportunidades surgem em empresas com estratégias de diferenciação (ex.: marcas fortes para LREN3). Analise o fluxo de caixa livre (FCL > 0) e a tendência do EBITDA nos últimos 3 anos. Compare com peers (ex.: varejo ~15%) para avaliar competitividade. Verifique balanços trimestrais e tendências setoriais (ex.: e-commerce). Evite empresas com EBITDA declinante ou dependência de promoções. Analise o ROIC (> 5%) e o CAPEX para confirmar potencial de melhoria. Setores competitivos exigem cautela extra.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Margem EBITDA",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "10 a 20%",
+        "Interpretação": "Geração de caixa moderada, com desempenho razoável, aceitável em setores com margens moderadas (ex.: varejo, LREN3). Em 2025, essa faixa reflete capacidade de cobrir custos operacionais, mas exige análise de pressão competitiva e custos fixos. Investidores devem comparar com peers (ex.: varejo ~15%) e avaliar a sustentabilidade do EBITDA (ex.: variação < 15% em 5 anos). Setores estáveis (ex.: consumo defensivo, ABEV3) são menos arriscados, mas empresas cíclicas (ex.: GGBR4) podem enfrentar volatilidade. Oportunidades surgem em empresas com melhoria operacional, como automação ou expansão de mercado. Riscos incluem aumento de custos ou queda de demanda. Analise o fluxo de caixa livre (FCL > CAPEX) e a composição dos custos operacionais. Verifique balanços trimestrais e tendências setoriais (ex.: consumo estável). Evite empresas com EBITDA instável ou dependência de receitas cíclicas. Analise o ROIC (> 8%) para confirmar eficiência. Setores com barreiras de entrada (ex.: marcas fortes) se destacam.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Margem EBITDA",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "20 a 30%",
+        "Interpretação": "Boa geração de caixa, desempenho sólido, comum em setores com barreiras de entrada (ex.: utilities, CPFE3). Investidores devem verificar consistência do EBITDA e poder de precificação.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Margem EBITDA",
+        "Classificação": "Bom",
+        "Faixa de Referência": "30 a 40%",
+        "Interpretação": "Alta geração de caixa, desempenho excepcional, comum em setores de alta margem (ex.: tecnologia, TOTS3). Investidores devem confirmar sustentabilidade e proteção contra concorrência.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Margem EBITDA",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 40%",
+        "Interpretação": "Geração de caixa excepcional, refletindo liderança de mercado e eficiência superior. Comum em setores de alto valor agregado (ex.: Weg). Investidores devem verificar sustentabilidade frente a riscos setoriais.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Margem Líquida",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo líquido, indicando ineficiência operacional ou financeira grave. Comum em empresas em crise (ex.: OIBR3) ou setores com alta concorrência (ex.: varejo, CRFB3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Margem Líquida",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "0 a 5%",
+        "Interpretação": "Baixa rentabilidade, indicando desafios operacionais ou financeiros. Comum em setores competitivos (ex.: varejo, MGLU3). Investidores devem analisar potencial de melhoria e redução de custos.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Margem Líquida",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "5 a 10%",
+        "Interpretação": "Rentabilidade limitada, comum em setores cíclicos (ex.: siderurgia, GGBR4). Investidores devem verificar tendência do lucro líquido e riscos setoriais.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Margem Líquida",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "10 a 15%",
+        "Interpretação": "Rentabilidade moderada, aceitável em setores maduros (ex.: indústria, CSNA3). Investidores devem analisar sustentabilidade do lucro e concorrência.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Margem Líquida",
+        "Classificação": "Bom",
+        "Faixa de Referência": "15 a 25%",
+        "Interpretação": "Boa rentabilidade, desempenho sólido, comum em setores com barreiras de entrada (ex.: ABEV3). Investidores devem confirmar consistência do lucro líquido.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Margem Líquida",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 25%",
+        "Interpretação": "Alta rentabilidade, desempenho excepcional, comum em setores de alta margem (ex.: tecnologia, TOTS3). Investidores devem verificar sustentabilidade frente a riscos setoriais.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "P/Ativo Circulante Líquido",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Ativo circulante líquido negativo (passivo circulante excede ativo circulante), indicando risco crítico de insolvência. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "P/Ativo Circulante Líquido",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Abaixo de 0",
+        "Interpretação": "Preço da ação não reflete liquidez, indicando passivos elevados. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo reestruturação robusta.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "P/Ativo Circulante Líquido",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "0 a 1",
+        "Interpretação": "Liquidez muito baixa em relação ao preço da ação, indicando risco financeiro. Investidores devem analisar qualidade do ativo circulante e fluxo de caixa.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "P/Ativo Circulante Líquido",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "1 a 2",
+        "Interpretação": "Liquidez razoável em relação ao preço, aceitável em setores estáveis (ex.: ABEV3). Investidores devem verificar qualidade dos ativos circulantes.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "P/Ativo Circulante Líquido",
+        "Classificação": "Bom",
+        "Faixa de Referência": "2 a 3",
+        "Interpretação": "Boa liquidez em relação ao preço, indicando equilíbrio financeiro. Comum em empresas maduras (ex.: WEGE3). Investidores devem confirmar sustentabilidade.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "P/Ativo Circulante Líquido",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 3",
+        "Interpretação": "Alta liquidez em relação ao preço, sugerindo subvalorização ou excesso de caixa. Comum em tecnologia (ex.: TOTS3). Investidores devem avaliar alocação de capital.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "P/Capital de Giro",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Capital de giro negativo (ativo circulante menor que passivo circulante), indicando risco crítico de insolvência. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "P/Capital de Giro",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Abaixo de 0",
+        "Interpretação": "Preço da ação não reflete capital de giro, indicando passivos elevados. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo reestruturação robusta.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "P/Capital de Giro",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "0 a 2",
+        "Interpretação": "Baixa capacidade de financiar operações de curto prazo em relação ao preço. Investidores devem analisar qualidade do capital de giro e fluxo de caixa.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "P/Capital de Giro",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "2 a 4",
+        "Interpretação": "Capacidade moderada de financiar operações, aceitável em setores estáveis (ex.: ABEV3). Investidores devem verificar qualidade do ativo circulante.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "P/Capital de Giro",
+        "Classificação": "Bom",
+        "Faixa de Referência": "4 a 6",
+        "Interpretação": "Boa capacidade de financiar operações, indicando equilíbrio financeiro. Comum em empresas maduras (ex.: LREN3). Investidores devem confirmar sustentabilidade.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "P/Capital de Giro",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 6",
+        "Interpretação": "Alta capacidade de financiar operações, sugerindo subvalorização ou excesso de caixa. Comum em tecnologia (ex.: TOTS3). Investidores devem avaliar alocação de capital.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "P/EBIT",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo operacional, com EBIT negativo, indicando ineficiência grave ou investimentos pesados. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "P/EBIT",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 20x",
+        "Interpretação": "Empresa extremamente cara, preço é mais de 20 vezes o EBIT, sugerindo sobrevalorização. Comum em setores de tecnologia (ex.: NUBR33). Investidores devem comparar com peers e avaliar crescimento projetado.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "P/EBIT",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "15 a 20x",
+        "Interpretação": "Empresa cara, comum em setores de crescimento (ex.: saúde, RDOR3). Investidores devem analisar se o crescimento justifica o preço e comparar com média setorial.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "P/EBIT",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "10 a 15x",
+        "Interpretação": "Avaliação razoável, comum em setores maduros (ex.: varejo, LREN3). Investidores devem verificar consistência do EBIT e tendências setoriais.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "P/EBIT",
+        "Classificação": "Bom",
+        "Faixa de Referência": "5 a 10x",
+        "Interpretação": "Subvalorizada, oportunidade em setores cíclicos (ex.: mineração, VALE3). Investidores devem confirmar fluxo de caixa livre e sustentabilidade do EBIT.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "P/EBIT",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "0 a 5x",
+        "Interpretação": "Extremamente subvalorizada, sugere oportunidade ou EBIT inflado. Comum em setores em recuperação (ex.: PETR4). Investidores devem verificar fluxo de caixa livre e ROIC.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "P/EBITDA",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo operacional, com EBITDA negativo, indicando ineficiência grave ou problemas estruturais. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "P/EBITDA",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 15x",
+        "Interpretação": "Empresa extremamente cara, preço é mais de 15 vezes o EBITDA, sugerindo sobrevalorização. Comum em setores de tecnologia (ex.: NUBR33). Investidores devem comparar com peers e avaliar crescimento projetado.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "P/EBITDA",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "10 a 15x",
+        "Interpretação": "Empresa cara, comum em setores de crescimento (ex.: saúde, RDOR3). Investidores devem analisar se o crescimento justifica o preço e comparar com média setorial.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "P/EBITDA",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "6 a 10x",
+        "Interpretação": "Avaliação razoável, comum em setores maduros (ex.: varejo, LREN3). Investidores devem verificar consistência do EBITDA e tendências setoriais.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "P/EBITDA",
+        "Classificação": "Bom",
+        "Faixa de Referência": "3 a 6x",
+        "Interpretação": "Subvalorizada, oportunidade em setores cíclicos (ex.: mineração, VALE3). Investidores devem confirmar fluxo de caixa livre e sustentabilidade do EBITDA.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "P/EBITDA",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "0 a 3x",
+        "Interpretação": "Extremamente subvalorizada, sugere oportunidade ou EBITDA inflado. Comum em setores em recuperação (ex.: PETR4). Investidores devem verificar fluxo de caixa livre e ROIC.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "P/L",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo por ação, indicando problemas operacionais ou financeiros graves. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "P/L",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 20x",
+        "Interpretação": "Empresa extremamente cara, preço é mais de 20 vezes o lucro por ação, sugerindo sobrevalorização. Comum em setores de tecnologia (ex.: NUBR33). Investidores devem comparar com peers e avaliar crescimento projetado.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "P/L",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "15 a 20x",
+        "Interpretação": "Empresa cara, comum em setores de crescimento (ex.: saúde, RDOR3). Investidores devem analisar se o crescimento justifica o preço e comparar com média setorial.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "P/L",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "10 a 15x",
+        "Interpretação": "Avaliação razoável, comum em setores maduros (ex.: varejo, LREN3). Investidores devem verificar consistência do lucro e tendências setoriais.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "P/L",
+        "Classificação": "Bom",
+        "Faixa de Referência": "5 a 10x",
+        "Interpretação": "Subvalorizada, oportunidade em setores cíclicos (ex.: mineração, VALE3). Investidores devem confirmar fluxo de caixa livre e sustentabilidade do lucro.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "P/L",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "0 a 5x",
+        "Interpretação": "Extremamente subvalorizada, sugere oportunidade ou lucro inflado. Comum em setores em recuperação (ex.: PETR4). Investidores devem verificar fluxo de caixa livre e ROE.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "P/VPA",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Patrimônio líquido por ação negativo, indicando risco crítico de insolvência. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "P/VPA",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 2",
+        "Interpretação": "Empresa extremamente cara, preço é mais de 2 vezes o valor patrimonial por ação, sugerindo sobrevalorização. Comum em setores de tecnologia (ex.: NUBR33). Investidores devem comparar com peers e avaliar qualidade do patrimônio.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "P/VPA",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "1,5 a 2",
+        "Interpretação": "Empresa cara, comum em setores de crescimento (ex.: saúde, RDOR3). Investidores devem analisar se o crescimento justifica o preço e comparar com média setorial.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "P/VPA",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "1 a 1,5",
+        "Interpretação": "Avaliação razoável, comum em setores maduros (ex.: varejo, LREN3). Investidores devem verificar consistência do patrimônio e tendências setoriais.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "P/VPA",
+        "Classificação": "Bom",
+        "Faixa de Referência": "0,5 a 1",
+        "Interpretação": "Subvalorizada, oportunidade em setores cíclicos (ex.: mineração, VALE3). Investidores devem confirmar qualidade do patrimônio e fluxo de caixa livre.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "P/VPA",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "0 a 0,5",
+        "Interpretação": "Extremamente subvalorizada, sugere oportunidade ou patrimônio inflado. Comum em setores em recuperação (ex.: PETR4). Investidores devem verificar fluxo de caixa livre e ROE.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "Patrimônio/Ativos",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Patrimônio líquido negativo, passivos superam ativos, indicando risco crítico de insolvência. Comum em empresas em crise (ex.: OI). Investidores devem exigir plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "Patrimônio/Ativos",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "0 a 0,2",
+        "Interpretação": "Alta alavancagem, patrimônio representa menos de 20% dos ativos, indicando dependência de dívidas. Comum em setores com dívidas elevadas (ex.: construção). Investidores devem analisar capacidade de pagamento de juros.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "Patrimônio/Ativos",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "0,2 a 0,3",
+        "Interpretação": "Alavancagem elevada, patrimônio financia 20-30% dos ativos, indicando risco moderado. Investidores devem monitorar gestão da dívida e geração de caixa.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "Patrimônio/Ativos",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "0,3 a 0,5",
+        "Interpretação": "Alavancagem moderada, patrimônio financia 30-50% dos ativos, aceitável em setores com alavancagem moderada (ex.: indústria). Investidores devem monitorar gestão da dívida e geração de caixa.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "Patrimônio/Ativos",
+        "Classificação": "Bom",
+        "Faixa de Referência": "0,5 a 0,8",
+        "Interpretação": "Baixa alavancagem, estrutura sólida, patrimônio representa 50-80% dos ativos. Comum em setores estáveis (ex.: utilities). Sinal de segurança financeira.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "Patrimônio/Ativos",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 0,8",
+        "Interpretação": "Alavancagem mínima, estrutura excepcional, patrimônio financia mais de 80% dos ativos. Ideal para setores voláteis (ex.: commodities). Verificar se excesso de capital próprio limita crescimento.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "PL/Ativos",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Patrimônio líquido negativo, passivos superam ativos, indicando risco crítico de insolvência. Comum em empresas em crise (ex.: OI). Investidores devem exigir plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "PL/Ativos",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "0 a 0,2",
+        "Interpretação": "Alta alavancagem, patrimônio representa menos de 20% dos ativos, indicando dependência de dívidas. Comum em setores com dívidas elevadas (ex.: construção). Investidores devem analisar capacidade de pagamento de juros.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "PL/Ativos",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "0,2 a 0,5",
+        "Interpretação": "Alavancagem moderada, patrimônio financia 20-50% dos ativos, aceitável em setores com alavancagem moderada (ex.: indústria). Investidores devem monitorar gestão da dívida e geração de caixa.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "PL/Ativos",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "0,5 a 0,8",
+        "Interpretação": "Baixa alavancagem, estrutura sólida, patrimônio representa 50-80% dos ativos. Comum em setores estáveis (ex.: utilities). Sinal de segurança financeira.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "PL/Ativos",
+        "Classificação": "Bom",
+        "Faixa de Referência": "0,8 a 1",
+        "Interpretação": "Alavancagem mínima, estrutura excepcional, patrimônio financia 80-100% dos ativos. Ideal para setores voláteis (ex.: commodities). Verificar se excesso de capital próprio limita crescimento.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "PL/Ativos",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "Acima de 1",
+        "Interpretação": "Estrutura financeira excepcional, patrimônio excede ativos, indicando altíssima capitalização. Comum em empresas com reservas elevadas (ex.: Weg). Investidores devem verificar alocação de capital.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "PSR",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Receita líquida negativa, indicando problemas operacionais graves ou falha contábil. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "PSR",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 3x",
+        "Interpretação": "Empresa extremamente cara, valor de mercado é mais de 3 vezes a receita líquida, sugerindo sobrevalorização. Comum em setores de tecnologia (ex.: NUBR33). Investidores devem comparar com peers e avaliar crescimento projetado.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "PSR",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "2 a 3x",
+        "Interpretação": "Empresa cara, comum em setores de crescimento (ex.: saúde, RDOR3). Investidores devem analisar se o crescimento justifica o preço e comparar com média setorial.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "PSR",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "1 a 2x",
+        "Interpretação": "Avaliação razoável, comum em setores maduros (ex.: varejo, LREN3). Investidores devem verificar consistência da receita e tendências setoriais.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "PSR",
+        "Classificação": "Bom",
+        "Faixa de Referência": "0,5 a 1x",
+        "Interpretação": "Subvalorizada, oportunidade em setores cíclicos (ex.: mineração, VALE3). Investidores devem confirmar fluxo de caixa livre e sustentabilidade da receita.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "PSR",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "0 a 0,5x",
+        "Interpretação": "Extremamente subvalorizada, sugere oportunidade ou receita inflada. Comum em setores em recuperação (ex.: PETR4). Investidores devem verificar fluxo de caixa livre e Margem Bruta.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "P/Sales Ratio",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Receita líquida negativa, indicando problemas operacionais graves ou falha contábil. Comum em empresas em crise (ex.: OIBR3). Investidores devem evitar, salvo plano robusto de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "P/Sales Ratio",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "Acima de 3x",
+        "Interpretação": "Empresa extremamente cara, valor de mercado é mais de 3 vezes a receita líquida, sugerindo sobrevalorização. Comum em setores de tecnologia (ex.: NUBR33). Investidores devem comparar com peers e avaliar crescimento projetado.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "P/Sales Ratio",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "2 a 3x",
+        "Interpretação": "Empresa cara, comum em setores de crescimento (ex.: saúde, RDOR3). Investidores devem analisar se o crescimento justifica o preço e comparar com média setorial.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "P/Sales Ratio",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "1 a 2x",
+        "Interpretação": "Avaliação razoável, comum em setores maduros (ex.: varejo, LREN3). Investidores devem verificar consistência da receita e tendências setoriais.",
+        "Classificação2": "Moderado"
+    },
+    {
+        "Indicador": "P/Sales Ratio",
+        "Classificação": "Bom",
+        "Faixa de Referência": "0,5 a 1x",
+        "Interpretação": "Subvalorizada, oportunidade em setores cíclicos (ex.: mineração, VALE3). Investidores devem confirmar fluxo de caixa livre e sustentabilidade da receita.",
+        "Classificação2": "Bom"
+    },
+    {
+        "Indicador": "P/Sales Ratio",
+        "Classificação": "Ótimo",
+        "Faixa de Referência": "0 a 0,5x",
+        "Interpretação": "Extremamente subvalorizada, sugere oportunidade ou receita inflada. Comum em setores em recuperação (ex.: PETR4). Investidores devem verificar fluxo de caixa livre e Margem Bruta.",
+        "Classificação2": "Ótimo"
+    },
+    {
+        "Indicador": "ROA",
+        "Classificação": "Crítico",
+        "Faixa de Referência": "Negativa",
+        "Interpretação": "Prejuízo, ativos gerando retorno negativo, indicando ineficiência grave. Comum em empresas em crise ou com investimentos mal sucedidos (ex.: OI). Investidores devem analisar causas e potencial de recuperação.",
+        "Classificação2": "Crítico"
+    },
+    {
+        "Indicador": "ROA",
+        "Classificação": "Péssimo",
+        "Faixa de Referência": "0 a 3%",
+        "Interpretação": "Baixa eficiência, retorno limitado dos ativos, comum em setores intensivos em capital (ex.: infraestrutura). Investidores devem investigar potencial de melhoria operacional.",
+        "Classificação2": "Péssimo"
+    },
+    {
+        "Indicador": "ROA",
+        "Classificação": "Ruim",
+        "Faixa de Referência": "3 a 8%",
+        "Interpretação": "Eficiência moderada, desempenho razoável, aceitável em setores com margens moderadas (ex.: CSNA3). Investidores devem analisar tendência do ROA e composição dos ativos para avaliar consistência.",
+        "Classificação2": "Ruim"
+    },
+    {
+        "Indicador": "ROA",
+        "Classificação": "Moderado",
+        "Faixa de Referência": "8 a 15%",
+        "Interpretação": "Boa eficiência, retorno sólido dos ativos, comum em setores com alta rotatividade (ex.: varejo). Investidores devem confirmar sustentabilidade do ROA e qualidade dos ativos.",
+        "Classificação2": "Moderado"
+    },
+    {
