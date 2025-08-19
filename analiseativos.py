@@ -1,4 +1,712 @@
+# Define a classe LucroLiquidoEvaluator para avaliar o indicador Lucro Líquido
+class LucroLiquidoEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do Lucro Líquido
+    def __init__(self):
+        # Define string multilinha explicando o índice Lucro Líquido
+        self.definicao = '''
+        O Lucro Líquido representa o resultado final da empresa após todas as receitas, custos, despesas, juros, impostos e outros ajustes,
+        calculado como Receita Líquida menos todas as despesas (operacionais, financeiras e tributárias). É um indicador de lucratividade líquida
+        que reflete a capacidade da empresa de gerar lucro para os acionistas. Valores altos sugerem eficiência e saúde financeira, enquanto valores
+        baixos ou negativos indicam fragilidade ou ineficiência.
+        '''
+        # Define a categoria de agrupamento como "Lucratividade"
+        self.agrupador = 'Lucratividade'
+        # Define a fórmula do Lucro Líquido
+        self.formula = 'Lucro Líquido = Receita Líquida - (Custos Operacionais + Despesas Operacionais + Juros + Impostos + Outros Ajustes)'
 
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Avalia o valor do Lucro Líquido em relação à Receita Líquida e retorna um objeto ResultadoIND
+    def avaliar(self, lucro_liquido, receita_liquida):
+        # Tenta processar o valor do Lucro Líquido e Receita Líquida
+        try:
+            # Verifica se as entradas são numéricas (int ou float) ou strings que podem ser convertidas
+            for param, nome in [(lucro_liquido, "Lucro Líquido"), (receita_liquida, "Receita Líquida")]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte Lucro Líquido e Receita Líquida para float
+            lucro_liquido = float(lucro_liquido)
+            receita_liquida = float(receita_liquida)
+            # Calcula a margem líquida (Lucro Líquido / Receita Líquida)
+            if receita_liquida == 0:
+                raise ValueError("A Receita Líquida não pode ser zero para calcular a margem líquida.")
+            margem_liquida = lucro_liquido / receita_liquida
+            # Verifica se Lucro Líquido é negativo, indicando prejuízo
+            if margem_liquida < 0:
+                # Retorna ResultadoIND para Lucro Líquido negativo
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='Lucro Líquido < 0',
+                    descricao='Um Lucro Líquido negativo indica prejuízo, sugerindo que as despesas totais superam as receitas. Comum em empresas em crise, startups ou setores com margens pressionadas, reflete fragilidade financeira e risco elevado para acionistas.',
+                    riscos='Risco de insolvência, diluição acionária ou necessidade de reestruturação. Pode haver má gestão ou baixa competitividade de mercado.',
+                    referencia='Avalie evaluate_ebit para lucratividade operacional, evaluate_cash_flow para geração de caixa e evaluate_debt_to_equity para alavancagem.',
+                    recomendacao='Evite investir até que a empresa demonstre recuperação financeira. Priorize análise de custos e estratégias de turnaround.'
+                )
+            # Verifica se a margem líquida está entre 0 e 5%, indicando lucratividade baixa
+            elif 0 <= margem_liquida <= 0.05:
+                # Retorna ResultadoIND para lucratividade baixa
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='0 <= Margem Líquida <= 5%',
+                    descricao='A margem líquida é baixa, indicando lucratividade limitada após todas as despesas. Comum em setores competitivos ou com altos custos, como varejo ou indústria pesada, sugere eficiência reduzida e capacidade limitada de gerar valor para acionistas.',
+                    riscos='Risco de margens comprimidas por concorrência ou aumento de custos. Pode haver dificuldades em financiar dividendos ou investimentos.',
+                    referencia='Analise evaluate_margem_ebit para lucratividade operacional, evaluate_roa para rentabilidade dos ativos e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Considere investir com cautela, avaliando estratégias de redução de custos e competitividade. Priorize empresas com planos de melhoria financeira.'
+                )
+            # Verifica se a margem líquida está entre 5% e 10%, indicando lucratividade moderada
+            elif 0.05 < margem_liquida <= 0.10:
+                # Retorna ResultadoIND para lucratividade moderada
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='5% < Margem Líquida <= 10%',
+                    descricao='A margem líquida está em uma faixa moderada, indicando eficiência razoável na geração de lucro após todas as despesas. Comum em empresas estáveis, como manufatura ou serviços, sugere capacidade de cobrir custos, mas com espaço para melhorias.',
+                    riscos='Risco de estagnação na lucratividade em cenários de aumento de custos ou impostos. Pode haver dependência de mercados específicos.',
+                    referencia='Compare com evaluate_margem_ebitda para lucratividade operacional, evaluate_giro_ativo para eficiência e evaluate_liquidez_corrente para liquidez.',
+                    recomendacao='Considere investir, mas avalie a sustentabilidade dos lucros e estratégias de crescimento. Boa opção para investidores que buscam estabilidade.'
+                )
+            # Verifica se a margem líquida está entre 10% e 20%, indicando boa lucratividade
+            elif 0.10 < margem_liquida <= 0.20:
+                # Retorna ResultadoIND para boa lucratividade
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='10% < Margem Líquida <= 20%',
+                    descricao='A margem líquida é alta, indicando boa lucratividade após todas as despesas. Comum em empresas com operações eficientes, como bens de consumo ou tecnologia, sugere forte capacidade de gerar valor para acionistas e financiar investimentos.',
+                    riscos='Risco de dependência de mercados específicos ou sazonalidade. Pode haver vulnerabilidade a choques econômicos ou aumento de despesas.',
+                    referencia='Verifique evaluate_roe para rentabilidade patrimonial, evaluate_cash_flow para geração de caixa e evaluate_p_l para valuation.',
+                    recomendacao='Considere investir, mas monitore a consistência dos lucros e exposição a riscos de mercado. Boa opção para investidores que buscam eficiência.'
+                )
+            # Verifica se a margem líquida excede 20%, indicando lucratividade excepcional
+            elif margem_liquida > 0.20:
+                # Retorna ResultadoIND para lucratividade excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='Margem Líquida > 20%',
+                    descricao='A margem líquida é extremamente alta, indicando lucratividade excepcional. Típico de empresas com modelos de negócios eficientes, como tecnologia ou serviços especializados, sugere forte competitividade e capacidade de financiar crescimento ou dividendos.',
+                    riscos='Risco de margens insustentáveis em mercados saturados ou com alta concorrência. Pode haver dependência de receitas voláteis.',
+                    referencia='Combine com evaluate_margem_ebitda para lucratividade operacional, evaluate_roe para rentabilidade patrimonial e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Invista se os fundamentos suportarem a robustez financeira, mas diversifique para mitigar riscos de mercado. Considere empresas com crescimento sustentável.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o Lucro Líquido: {mensagem}.
+                Verifique os dados de entrada (Lucro Líquido e Receita Líquida) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+# Define a classe EBITDAEvaluator para avaliar o indicador EBITDA
+class EBITDAEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do EBITDA
+    def __init__(self):
+        # Define string multilinha explicando o índice EBITDA
+        self.definicao = '''
+        O EBITDA (Earnings Before Interest, Taxes, Depreciation and Amortization) representa o lucro antes de juros, impostos,
+        depreciação e amortização, calculado como Receita Líquida menos Custos e Despesas Operacionais (excluindo juros, impostos,
+        depreciação e amortização). É um indicador de lucratividade operacional que avalia a capacidade da empresa de gerar caixa
+        a partir de suas operações principais, sem os efeitos de estrutura de capital ou políticas contábeis. Valores altos sugerem
+        eficiência operacional, enquanto valores baixos ou negativos indicam fragilidade.
+        '''
+        # Define a categoria de agrupamento como "Lucratividade Operacional"
+        self.agrupador = 'Lucratividade Operacional'
+        # Define a fórmula do EBITDA
+        self.formula = 'EBITDA = Receita Líquida - Custos Operacionais - Despesas Operacionais (excluindo Depreciação e Amortização)'
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Avalia o valor do EBITDA em relação à Receita Líquida e retorna um objeto ResultadoIND
+    def avaliar(self, ebitda, receita_liquida):
+        # Tenta processar o valor do EBITDA e Receita Líquida
+        try:
+            # Verifica se as entradas são numéricas (int ou float) ou strings que podem ser convertidas
+            for param, nome in [(ebitda, "EBITDA"), (receita_liquida, "Receita Líquida")]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte EBITDA e Receita Líquida para float
+            ebitda = float(ebitda)
+            receita_liquida = float(receita_liquida)
+            # Calcula a margem EBITDA (EBITDA / Receita Líquida)
+            if receita_liquida == 0:
+                raise ValueError("A Receita Líquida não pode ser zero para calcular a margem EBITDA.")
+            margem_ebitda = ebitda / receita_liquida
+            # Verifica se EBITDA é negativo, indicando prejuízo operacional
+            if margem_ebitda < 0:
+                # Retorna ResultadoIND para EBITDA negativo
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='EBITDA < 0',
+                    descricao='Um EBITDA negativo indica prejuízo operacional antes de depreciação e amortização, sugerindo que os custos operacionais superam a receita. Comum em empresas em crise ou setores com margens pressionadas, reflete ineficiência operacional e alto risco financeiro.',
+                    riscos='Risco de insolvência, má gestão operacional ou baixa competitividade. Pode haver necessidade de reestruturação ou cortes de custos.',
+                    referencia='Avalie evaluate_margem_liquida para lucratividade líquida, evaluate_cash_flow para geração de caixa e evaluate_giro_ativo para eficiência.',
+                    recomendacao='Evite investir até que a empresa demonstre recuperação operacional. Priorize análise de custos e estratégias de turnaround.'
+                )
+            # Verifica se a margem EBITDA está entre 0 e 10%, indicando lucratividade operacional baixa
+            elif 0 <= margem_ebitda <= 0.10:
+                # Retorna ResultadoIND para lucratividade baixa
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='0 <= Margem EBITDA <= 10%',
+                    descricao='A margem EBITDA é baixa, indicando lucratividade operacional limitada. Comum em setores competitivos ou com altos custos, como varejo ou indústria pesada, sugere eficiência reduzida na geração de caixa operacional, com margens apertadas.',
+                    riscos='Risco de margens comprimidas por concorrência ou aumento de custos. Pode haver dificuldades em financiar investimentos ou pagar dívidas.',
+                    referencia='Analise evaluate_margem_bruta para eficiência de custos, evaluate_roa para rentabilidade dos ativos e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Considere investir com cautela, avaliando estratégias de redução de custos e competitividade. Priorize empresas com planos de melhoria operacional.'
+                )
+            # Verifica se a margem EBITDA está entre 10% e 20%, indicando lucratividade moderada
+            elif 0.10 < margem_ebitda <= 0.20:
+                # Retorna ResultadoIND para lucratividade moderada
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='10% < Margem EBITDA <= 20%',
+                    descricao='A margem EBITDA está em uma faixa moderada, indicando eficiência razoável na geração de caixa operacional. Comum em empresas estáveis, como manufatura ou serviços, sugere capacidade de cobrir custos operacionais, mas com espaço para melhorias.',
+                    riscos='Risco de estagnação na lucratividade em cenários de aumento de custos ou concorrência. Pode haver dependência de mercados específicos.',
+                    referencia='Compare com evaluate_margem_liquida para lucratividade líquida, evaluate_giro_ativo para eficiência e evaluate_debt_to_ebitda para alavancagem.',
+                    recomendacao='Considere investir, mas avalie a sustentabilidade dos lucros e estratégias de crescimento. Boa opção para investidores que buscam estabilidade.'
+                )
+            # Verifica se a margem EBITDA está entre 20% e 30%, indicando boa lucratividade
+            elif 0.20 < margem_ebitda <= 0.30:
+                # Retorna ResultadoIND para boa lucratividade
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='20% < Margem EBITDA <= 30%',
+                    descricao='A margem EBITDA é alta, indicando boa lucratividade operacional. Comum em empresas com operações eficientes, como bens de consumo ou tecnologia, sugere forte capacidade de gerar caixa a partir das atividades principais, com folga para investimentos.',
+                    riscos='Risco de dependência de mercados específicos ou sazonalidade. Pode haver vulnerabilidade a choques econômicos ou aumento de custos.',
+                    referencia='Verifique evaluate_roic para retorno sobre capital, evaluate_cash_flow para geração de caixa e evaluate_p_ebitda para valuation.',
+                    recomendacao='Considere investir, mas monitore a consistência dos lucros e exposição a riscos de mercado. Boa opção para investidores que buscam eficiência.'
+                )
+            # Verifica se a margem EBITDA excede 30%, indicando lucratividade excepcional
+            elif margem_ebitda > 0.30:
+                # Retorna ResultadoIND para lucratividade excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='Margem EBITDA > 30%',
+                    descricao='A margem EBITDA é extremamente alta, indicando lucratividade operacional excepcional. Típico de empresas com modelos de negócios eficientes, como tecnologia ou serviços especializados, sugere forte competitividade e capacidade de financiar crescimento ou dividendos.',
+                    riscos='Risco de margens insustentáveis em mercados saturados ou com alta concorrência. Pode haver dependência de receitas voláteis.',
+                    referencia='Combine com evaluate_margem_liquida para lucratividade líquida, evaluate_roe para rentabilidade patrimonial e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Invista se os fundamentos suportarem a robustez operacional, mas diversifique para mitigar riscos de mercado. Considere empresas com crescimento sustentável.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o EBITDA: {mensagem}.
+                Verifique os dados de entrada (EBITDA e Receita Líquida) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+# Define a classe EBITEvaluator para avaliar o indicador EBIT
+class EBITEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do EBIT
+    def __init__(self):
+        # Define string multilinha explicando o índice EBIT
+        self.definicao = '''
+        O EBIT (Earnings Before Interest and Taxes) representa o lucro antes de juros e impostos, calculado como Receita Líquida menos
+        Custos e Despesas Operacionais (excluindo juros e impostos). É um indicador de lucratividade operacional que avalia a capacidade
+        da empresa de gerar lucros a partir de suas operações principais. Valores altos sugerem eficiência operacional, enquanto valores
+        baixos ou negativos indicam fragilidade ou ineficiência.
+        '''
+        # Define a categoria de agrupamento como "Lucratividade Operacional"
+        self.agrupador = 'Lucratividade Operacional'
+        # Define a fórmula do EBIT
+        self.formula = 'EBIT = Receita Líquida - Custos Operacionais - Despesas Operacionais'
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Avalia o valor do EBIT em relação à Receita Líquida e retorna um objeto ResultadoIND
+    def avaliar(self, ebit, receita_liquida):
+        # Tenta processar o valor do EBIT e Receita Líquida
+        try:
+            # Verifica se as entradas são numéricas (int ou float) ou strings que podem ser convertidas
+            for param, nome in [(ebit, "EBIT"), (receita_liquida, "Receita Líquida")]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte EBIT e Receita Líquida para float
+            ebit = float(ebit)
+            receita_liquida = float(receita_liquida)
+            # Calcula a margem EBIT (EBIT / Receita Líquida)
+            if receita_liquida == 0:
+                raise ValueError("A Receita Líquida não pode ser zero para calcular a margem EBIT.")
+            margem_ebit = ebit / receita_liquida
+            # Verifica se EBIT é negativo, indicando prejuízo operacional
+            if margem_ebit < 0:
+                # Retorna ResultadoIND para EBIT negativo
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='EBIT < 0',
+                    descricao='Um EBIT negativo indica prejuízo operacional, sugerindo que os custos e despesas superam a receita das operações. Comum em empresas em crise, startups em fase inicial ou setores com margens pressionadas, isso reflete ineficiência operacional e risco elevado.',
+                    riscos='Risco de insolvência, má gestão operacional ou baixa competitividade de mercado. Pode haver necessidade de reestruturação ou cortes de custos.',
+                    referencia='Avalie evaluate_margem_liquida para lucratividade líquida, evaluate_cash_flow para geração de caixa e evaluate_giro_ativo para eficiência.',
+                    recomendacao='Evite investir até que a empresa demonstre recuperação operacional. Priorize análise de custos e estratégias de turnaround.'
+                )
+            # Verifica se a margem EBIT está entre 0 e 5%, indicando lucratividade operacional baixa
+            elif 0 <= margem_ebit <= 0.05:
+                # Retorna ResultadoIND para lucratividade baixa
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='0 <= Margem EBIT <= 5%',
+                    descricao='A margem EBIT é baixa, indicando lucratividade operacional limitada. Comum em setores competitivos ou com altos custos, como varejo ou indústria pesada, sugere eficiência reduzida na geração de lucros a partir das operações principais.',
+                    riscos='Risco de margens comprimidas por concorrência ou aumento de custos. Pode haver dificuldades em financiar investimentos ou pagar dívidas.',
+                    referencia='Analise evaluate_margem_bruta para eficiência de custos, evaluate_roa para rentabilidade dos ativos e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Considere investir com cautela, avaliando estratégias de redução de custos e competitividade. Priorize empresas com planos de melhoria operacional.'
+                )
+            # Verifica se a margem EBIT está entre 5% e 10%, indicando lucratividade moderada
+            elif 0.05 < margem_ebit <= 0.10:
+                # Retorna ResultadoIND para lucratividade moderada
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='5% < Margem EBIT <= 10%',
+                    descricao='A margem EBIT está em uma faixa moderada, indicando eficiência razoável na geração de lucros operacionais. Comum em empresas estáveis, como manufatura ou serviços, sugere capacidade de cobrir custos operacionais, mas com espaço para melhorias.',
+                    riscos='Risco de estagnação na lucratividade em cenários de aumento de custos ou concorrência. Pode haver dependência de mercados específicos.',
+                    referencia='Compare com evaluate_margem_liquida para lucratividade líquida, evaluate_giro_ativo para eficiência e evaluate_debt_to_ebitda para alavancagem.',
+                    recomendacao='Considere investir, mas avalie a sustentabilidade dos lucros e estratégias de crescimento. Boa opção para investidores que buscam estabilidade.'
+                )
+            # Verifica se a margem EBIT está entre 10% e 20%, indicando boa lucratividade
+            elif 0.10 < margem_ebit <= 0.20:
+                # Retorna ResultadoIND para boa lucratividade
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='10% < Margem EBIT <= 20%',
+                    descricao='A margem EBIT é alta, indicando boa lucratividade operacional. Comum em empresas com operações eficientes, como bens de consumo ou tecnologia, sugere forte capacidade de gerar lucros a partir das atividades principais, com folga para investimentos.',
+                    riscos='Risco de dependência de mercados específicos ou sazonalidade. Pode haver vulnerabilidade a choques econômicos ou aumento de custos.',
+                    referencia='Verifique evaluate_roic para retorno sobre capital, evaluate_cash_flow para geração de caixa e evaluate_psr para valuation.',
+                    recomendacao='Considere investir, mas monitore a consistência dos lucros e exposição a riscos de mercado. Boa opção para investidores que buscam eficiência.'
+                )
+            # Verifica se a margem EBIT excede 20%, indicando lucratividade excepcional
+            elif margem_ebit > 0.20:
+                # Retorna ResultadoIND para lucratividade excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='Margem EBIT > 20%',
+                    descricao='A margem EBIT é extremamente alta, indicando lucratividade operacional excepcional. Típico de empresas com modelos de negócios eficientes, como tecnologia ou serviços especializados, sugere forte competitividade e capacidade de financiar crescimento ou dividendos.',
+                    riscos='Risco de margens insustentáveis em mercados saturados ou com alta concorrência. Pode haver dependência de receitas voláteis.',
+                    referencia='Combine com evaluate_margem_liquida para lucratividade líquida, evaluate_roe para rentabilidade patrimonial e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Invista se os fundamentos suportarem a robustez operacional, mas diversifique para mitigar riscos de mercado. Considere empresas com crescimento sustentável.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o EBIT: {mensagem}.
+                Verifique os dados de entrada (EBIT e Receita Líquida) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+# Define a classe ReceitaLiquidaEvaluator para avaliar o indicador Receita Líquida
+class ReceitaLiquidaEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição da Receita Líquida
+    def __init__(self):
+        # Define string multilinha explicando o índice Receita Líquida
+        self.definicao = '''
+        A Receita Líquida representa o total de vendas de bens ou serviços da empresa, após deduções como impostos, devoluções e descontos,
+        em um determinado período. É um indicador de desempenho operacional que reflete a capacidade da empresa de gerar vendas. Valores altos
+        sugerem forte desempenho comercial, enquanto valores baixos ou negativos indicam fraqueza operacional ou problemas de mercado.
+        '''
+        # Define a categoria de agrupamento como "Desempenho Operacional"
+        self.agrupador = 'Desempenho Operacional'
+        # Define a fórmula da Receita Líquida
+        self.formula = 'Receita Líquida = Receita Bruta - (Impostos + Devoluções + Descontos)'
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Avalia o valor da Receita Líquida em relação aos Ativos Totais e retorna um objeto ResultadoIND
+    def avaliar(self, receita_liquida, ativos_totais):
+        # Tenta processar o valor da Receita Líquida e Ativos Totais
+        try:
+            # Verifica se as entradas são numéricas (int ou float) ou strings que podem ser convertidas
+            for param, nome in [(receita_liquida, "Receita Líquida"), (ativos_totais, "Ativos Totais")]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte Receita Líquida e Ativos Totais para float
+            receita_liquida = float(receita_liquida)
+            ativos_totais = float(ativos_totais)
+            # Calcula a proporção da Receita Líquida em relação aos Ativos Totais (Giro do Ativo)
+            if ativos_totais == 0:
+                raise ValueError("Os Ativos Totais não podem ser zero para calcular a proporção.")
+            proporcao_receita_ativos = receita_liquida / ativos_totais
+            # Verifica se Receita Líquida é negativa, indicando problemas operacionais
+            if receita_liquida < 0:
+                # Retorna ResultadoIND para Receita Líquida negativa
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='Receita Líquida < 0',
+                    descricao='Uma Receita Líquida negativa é inválida ou indica perdas operacionais graves, como devoluções ou ajustes contábeis excessivos. Comum em empresas em crise ou com problemas de mercado, sugere fragilidade operacional e risco elevado.',
+                    riscos='Risco de insolvência, má gestão operacional ou baixa demanda de mercado. Pode haver manipulação contábil ou erros nos relatórios financeiros.',
+                    referencia='Avalie evaluate_margem_liquida para lucratividade, evaluate_cash_flow para geração de caixa e evaluate_psr para valuation.',
+                    recomendacao='Evite investir até que a empresa demonstre recuperação operacional. Priorize análise de fluxo de caixa e estratégias de mercado.'
+                )
+            # Verifica se a proporção está entre 0 e 0.5, indicando baixa eficiência
+            elif 0 <= proporcao_receita_ativos <= 0.5:
+                # Retorna ResultadoIND para baixa eficiência
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='0 <= Receita Líquida / Ativos Totais <= 0.5',
+                    descricao='A Receita Líquida é baixa em relação aos ativos, indicando baixa eficiência na utilização de recursos para gerar vendas. Comum em setores intensivos em capital, como imobiliário ou infraestrutura, sugere ineficiência operacional ou ativos ociosos.',
+                    riscos='Risco de ativos subutilizados ou baixa competitividade de mercado. Pode haver necessidade de desinvestimento ou reestruturação operacional.',
+                    referencia='Analise evaluate_giro_ativo para eficiência, evaluate_roa para rentabilidade dos ativos e evaluate_cash_conversion_cycle para eficiência operacional.',
+                    recomendacao='Evite investir a menos que haja planos claros de otimização de ativos. Monitore estratégias para aumentar a receita.'
+                )
+            # Verifica se a proporção está entre 0.5 e 1, indicando eficiência moderada
+            elif 0.5 < proporcao_receita_ativos <= 1:
+                # Retorna ResultadoIND para eficiência moderada
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='0.5 < Receita Líquida / Ativos Totais <= 1',
+                    descricao='A Receita Líquida está em uma faixa moderada em relação aos ativos, indicando eficiência razoável na utilização de recursos. Comum em empresas de setores como manufatura ou varejo, sugere capacidade de gerar vendas, mas com espaço para melhorias.',
+                    riscos='Risco de estagnação na receita se os ativos não forem otimizados. Pode haver dependência de ativos fixos ou necessidade de reinvestimento.',
+                    referencia='Compare com evaluate_giro_ativo para eficiência, evaluate_margem_liquida para lucratividade e evaluate_liquidez_corrente para liquidez.',
+                    recomendacao='Considere investir com cautela, avaliando a capacidade de aumentar a receita e otimizar ativos. Priorize empresas com estratégias de crescimento.'
+                )
+            # Verifica se a proporção está entre 1 e 2, indicando boa eficiência
+            elif 1 < proporcao_receita_ativos <= 2:
+                # Retorna ResultadoIND para boa eficiência
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='1 < Receita Líquida / Ativos Totais <= 2',
+                    descricao='A Receita Líquida é alta em relação aos ativos, indicando boa eficiência na utilização de recursos para gerar vendas. Comum em empresas estáveis, como bens de consumo ou tecnologia, sugere forte desempenho operacional e produtividade dos ativos.',
+                    riscos='Risco de dependência de mercados específicos ou sazonalidade na receita. Pode haver necessidade de reinvestimento para manter o crescimento.',
+                    referencia='Verifique evaluate_roa para rentabilidade dos ativos, evaluate_cash_flow para geração de caixa e evaluate_psr para valuation.',
+                    recomendacao='Considere investir, mas monitore a sustentabilidade da receita e planos de expansão. Boa opção para investidores que buscam eficiência operacional.'
+                )
+            # Verifica se a proporção excede 2, indicando eficiência excepcional
+            elif proporcao_receita_ativos > 2:
+                # Retorna ResultadoIND para eficiência excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='Receita Líquida / Ativos Totais > 2',
+                    descricao='A Receita Líquida é extremamente alta em relação aos ativos, indicando eficiência excepcional na utilização de recursos. Típico de empresas com modelos leves, como tecnologia ou serviços, sugere forte competitividade e alta produtividade dos ativos.',
+                    riscos='Risco de dependência de receitas voláteis ou mercados saturados. Pode haver vulnerabilidade a choques econômicos ou mudanças de demanda.',
+                    referencia='Combine com evaluate_giro_ativo para eficiência, evaluate_margem_liquida para lucratividade e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Invista se os fundamentos suportarem a robustez operacional, mas diversifique para mitigar riscos de mercado. Considere empresas com crescimento sustentável.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar a Receita Líquida: {mensagem}.
+                Verifique os dados de entrada (Receita Líquida e Ativos Totais) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+# Define a classe DisponibilidadesEvaluator para avaliar o indicador Disponibilidades
+class DisponibilidadesEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição das Disponibilidades
+    def __init__(self):
+        # Define string multilinha explicando o índice Disponibilidades
+        self.definicao = '''
+        As Disponibilidades representam os recursos financeiros líquidos da empresa, como caixa, equivalentes de caixa (ex.: aplicações financeiras de curto prazo)
+        e outros ativos imediatamente conversíveis em dinheiro. É um indicador de liquidez imediata que avalia a capacidade da empresa de cumprir obrigações
+        financeiras de curto prazo sem depender de vendas ou recebíveis. Valores altos sugerem robustez financeira, enquanto valores baixos indicam fragilidade.
+        '''
+        # Define a categoria de agrupamento como "Liquidez"
+        self.agrupador = 'Liquidez'
+        # Define a fórmula das Disponibilidades
+        self.formula = 'Disponibilidades = Caixa + Equivalentes de Caixa'
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Avalia o valor das Disponibilidades em relação ao Passivo Circulante e retorna um objeto ResultadoIND
+    def avaliar(self, disponibilidades, passivo_circulante):
+        # Tenta processar o valor das Disponibilidades e Passivo Circulante
+        try:
+            # Verifica se as entradas são numéricas (int ou float) ou strings que podem ser convertidas
+            for param, nome in [(disponibilidades, "Disponibilidades"), (passivo_circulante, "Passivo Circulante")]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte Disponibilidades e Passivo Circulante para float
+            disponibilidades = float(disponibilidades)
+            passivo_circulante = float(passivo_circulante)
+            # Calcula a proporção das Disponibilidades em relação ao Passivo Circulante (Liquidez Imediata)
+            if passivo_circulante == 0:
+                raise ValueError("O Passivo Circulante não pode ser zero para calcular a proporção.")
+            proporcao_liquidez_imediata = disponibilidades / passivo_circulante
+            # Verifica se Disponibilidades são negativas, indicando erro nos dados
+            if disponibilidades < 0:
+                # Retorna ResultadoIND para Disponibilidades negativas
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='Disponibilidades < 0',
+                    descricao='Disponibilidades negativas são inválidas, indicando erros nos dados financeiros ou relatórios contábeis. Isso pode refletir falhas na consolidação de caixa ou manipulação de informações, tornando a análise de liquidez imediata inviável.',
+                    riscos='Risco de manipulação contábil ou baixa confiabilidade nos dados financeiros. Pode haver ausência de transparência ou erros graves nos relatórios.',
+                    referencia='Avalie evaluate_liquidez_corrente para liquidez geral, evaluate_cash_flow para geração de caixa e evaluate_margem_liquida para lucratividade.',
+                    recomendacao='Evite investir devido a possíveis erros nos dados ou falta de transparência. Verifique relatórios financeiros detalhados antes de qualquer decisão.'
+                )
+            # Verifica se a proporção está entre 0 e 0.2, indicando liquidez imediata muito baixa
+            elif 0 <= proporcao_liquidez_imediata < 0.2:
+                # Retorna ResultadoIND para liquidez imediata muito baixa
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='0 <= Disponibilidades / Passivo Circulante < 0.2',
+                    descricao='As Disponibilidades são muito baixas em relação ao Passivo Circulante, indicando liquidez imediata insuficiente para cobrir obrigações de curto prazo. Comum em empresas em crise ou com má gestão de caixa, sugere alto risco de insolvência.',
+                    riscos='Risco de falência, atrasos em pagamentos ou necessidade de financiamento emergencial. Pode haver dependência de recebíveis ou vendas de ativos.',
+                    referencia='Analise evaluate_liquidez_corrente para liquidez geral, evaluate_cash_flow para geração de caixa e evaluate_debt_to_assets para alavancagem.',
+                    recomendacao='Evite investir até que a empresa demonstre recuperação da liquidez. Priorize análise de fluxo de caixa e estratégias de reestruturação.'
+                )
+            # Verifica se a proporção está entre 0.2 e 0.5, indicando liquidez imediata moderada
+            elif 0.2 <= proporcao_liquidez_imediata < 0.5:
+                # Retorna ResultadoIND para liquidez imediata moderada
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='0.2 <= Disponibilidades / Passivo Circulante < 0.5',
+                    descricao='As Disponibilidades cobrem parcialmente o Passivo Circulante, indicando liquidez imediata moderada. Comum em empresas estáveis, como varejo ou manufatura, mas sugere capacidade limitada de lidar com obrigações de curto prazo sem recorrer a outros ativos.',
+                    riscos='Risco de dificuldades financeiras em cenários de estresse ou atrasos em recebíveis. Pode haver dependência de conversão de ativos para cobrir dívidas.',
+                    referencia='Compare com evaluate_liquidez_seca para liquidez sem estoques, evaluate_cash_conversion_cycle para eficiência e evaluate_margem_liquida para lucratividade.',
+                    recomendacao='Considere investir com cautela, avaliando a qualidade do fluxo de caixa e a gestão de caixa. Priorize empresas com reservas financeiras estáveis.'
+                )
+            # Verifica se a proporção está entre 0.5 e 1, indicando boa liquidez imediata
+            elif 0.5 <= proporcao_liquidez_imediata <= 1:
+                # Retorna ResultadoIND para boa liquidez imediata
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='0.5 <= Disponibilidades / Passivo Circulante <= 1',
+                    descricao='As Disponibilidades cobrem bem o Passivo Circulante, indicando boa liquidez imediata. Comum em empresas com gestão financeira sólida, como tecnologia ou bens de consumo, sugere capacidade de honrar obrigações de curto prazo com folga e resistência a imprevistos.',
+                    riscos='Risco de caixa ocioso, reduzindo retornos potenciais. Pode haver dependência de aplicações financeiras de baixo rendimento.',
+                    referencia='Verifique evaluate_liquidez_corrente para liquidez geral, evaluate_cash_flow para geração de caixa e evaluate_roe para rentabilidade.',
+                    recomendacao='Considere investir, mas avalie a eficiência na alocação de caixa. Boa opção para investidores que buscam segurança financeira.'
+                )
+            # Verifica se a proporção excede 1, indicando liquidez imediata excepcional
+            elif proporcao_liquidez_imediata > 1:
+                # Retorna ResultadoIND para liquidez imediata excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='Disponibilidades / Passivo Circulante > 1',
+                    descricao='As Disponibilidades excedem significativamente o Passivo Circulante, indicando liquidez imediata excepcional. Típico de empresas com forte geração de caixa, como software ou serviços, sugere robustez financeira e alta capacidade de honrar obrigações sem depender de outros ativos.',
+                    riscos='Risco de ineficiência no uso de caixa, com recursos ociosos. Pode haver perda de oportunidades de investimento ou retorno aos acionistas.',
+                    referencia='Combine com evaluate_liquidez_seca para liquidez sem estoques, evaluate_cash_conversion_cycle para eficiência e evaluate_psr para receita.',
+                    recomendacao='Invista se os fundamentos suportarem a robustez financeira, mas verifique a eficiência na alocação de caixa. Considere empresas com planos de reinvestimento.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar as Disponibilidades: {mensagem}.
+                Verifique os dados de entrada (Disponibilidades e Passivo Circulante) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
 # Define a classe AtivoCirculanteEvaluator para avaliar o indicador Ativo Circulante
 class AtivoCirculanteEvaluator:
     # Construtor que inicializa definição, agrupador e descrição do Ativo Circulante
