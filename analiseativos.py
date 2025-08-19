@@ -1,3 +1,1376 @@
+# Define a classe CAGRLucrosEvaluator para avaliar o indicador CAGR de Lucros 5 Anos
+class CAGRLucrosEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do CAGR de Lucros
+    def __init__(self):
+        # Define string multilinha explicando o índice CAGR de Lucros
+        self.definicao = '''
+        O CAGR (Compound Annual Growth Rate) de Lucros 5 Anos é a taxa média de crescimento anual do lucro líquido de uma empresa ao longo de cinco anos,
+        considerando o efeito da capitalização composta. Ele suaviza flutuações anuais, fornecendo uma visão estável do crescimento da lucratividade.
+        É amplamente utilizado para avaliar a consistência do crescimento dos lucros, comparar desempenho entre empresas e projetar resultados futuros.
+        Um CAGR alto indica crescimento robusto dos lucros, enquanto um CAGR baixo ou negativo sugere estagnação ou declínio na lucratividade.
+        '''
+        # Define a categoria de agrupamento como "Crescimento"
+        self.agrupador = 'Crescimento'
+        # Define a fórmula do CAGR
+        self.formula = '''
+        CAGR = (VF / VI)^(1/n) - 1
+        Onde:
+        - VF = Valor Final do lucro líquido (ao final do período de 5 anos)
+        - VI = Valor Inicial do lucro líquido (no início do período de 5 anos)
+        - n = Número de anos (neste caso, 5)
+        '''
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Calcula o CAGR com base nos valores inicial e final dos lucros
+    def calcular_cagr(self, valor_inicial, valor_final, anos=5):
+        try:
+            # Verifica se as entradas são numéricas
+            for param, nome in [
+                (valor_inicial, "Valor Inicial do Lucro Líquido"),
+                (valor_final, "Valor Final do Lucro Líquido"),
+                (anos, "Número de Anos")
+            ]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte parâmetros para float
+            valor_inicial = float(valor_inicial)
+            valor_final = float(valor_final)
+            anos = float(anos)
+            # Verifica se o valor inicial é maior que zero
+            if valor_inicial <= 0:
+                raise ValueError("O valor inicial do lucro líquido deve ser maior que zero.")
+            # Verifica se o número de anos é positivo
+            if anos <= 0:
+                raise ValueError("O número de anos deve ser maior que zero.")
+            # Calcula o CAGR
+            cagr = (valor_final / valor_inicial) ** (1 / anos) - 1
+            return cagr
+        except Exception as e:
+            raise ValueError(f"Erro ao calcular o CAGR: {str(e)}")
+
+    # Avalia o valor do CAGR de Lucros e retorna um objeto ResultadoIND
+    def avaliar(self, valor_inicial, valor_final, anos=5):
+        # Tenta processar o cálculo do CAGR e a avaliação
+        try:
+            # Calcula o CAGR
+            cagr = self.calcular_cagr(valor_inicial, valor_final, anos)
+            # Verifica se CAGR é negativo, indicando declínio nos lucros
+            if cagr < 0:
+                # Retorna ResultadoIND para CAGR negativo
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='CAGR < 0%',
+                    descricao='Um CAGR negativo indica declínio nos lucros líquidos ao longo dos cinco anos. Isso sugere dificuldades operacionais, aumento de custos ou perda de mercado, comprometendo a saúde financeira da empresa.',
+                    riscos='Risco de insustentabilidade financeira, erosão de valor para acionistas ou necessidade de reestruturação. Pode haver dependência de fatores externos adversos.',
+                    referencia='Avalie evaluate_margem_liquida para lucratividade, evaluate_div_liquida_ebitda para alavancagem e evaluate_fcf para geração de caixa.',
+                    recomendacao='Evite investir devido ao declínio nos lucros. Priorize análise de causas do declínio e estratégias de recuperação.'
+                )
+            # Verifica se CAGR está entre 0 e 5%, indicando crescimento baixo
+            elif 0 <= cagr <= 0.05:
+                # Retorna ResultadoIND para crescimento baixo
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='0 <= CAGR <= 5%',
+                    descricao='O CAGR indica crescimento baixo dos lucros líquidos, comum em setores maduros ou empresas com desafios de lucratividade. Sugere estabilidade, mas limitada capacidade de expansão dos lucros.',
+                    riscos='Risco de estagnação ou pressão sobre margens em setores competitivos. Pode haver dependência de melhorias operacionais para sustentar lucros.',
+                    referencia='Compare com evaluate_margem_ebitda para lucratividade, evaluate_roe para rentabilidade e evaluate_p_l para valuation.',
+                    recomendacao='Considere investir com cautela, priorizando empresas com margens sólidas ou potencial de melhoria operacional. Avalie o contexto setorial.'
+                )
+            # Verifica se CAGR está entre 5% e 10%, indicando crescimento moderado
+            elif 0.05 < cagr <= 0.10:
+                # Retorna ResultadoIND para crescimento moderado
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='5% < CAGR <= 10%',
+                    descricao='O CAGR indica crescimento moderado dos lucros líquidos, típico de empresas em setores estáveis ou em consolidação. Sugere equilíbrio entre crescimento e estabilidade, com potencial para ganhos consistentes.',
+                    riscos='Risco de competição setorial ou necessidade de investimentos para manter o crescimento. Pode haver sensibilidade a custos ou mudanças econômicas.',
+                    referencia='Analise evaluate_fcd para valuation, evaluate_liquidez_corrente para liquidez e evaluate_margem_bruta para eficiência.',
+                    recomendacao='Considere investir, especialmente se a empresa apresentar margens sólidas e boa gestão. Boa opção para investidores moderados.'
+                )
+            # Verifica se CAGR está entre 10% e 20%, indicando crescimento alto
+            elif 0.10 < cagr <= 0.20:
+                # Retorna ResultadoIND para crescimento alto
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='10% < CAGR <= 20%',
+                    descricao='O CAGR indica crescimento alto dos lucros líquidos, comum em empresas em setores dinâmicos, como tecnologia ou varejo em expansão. Sugere forte capacidade de crescimento e atratividade para investidores.',
+                    riscos='Risco de volatilidade em setores competitivos ou dependência de condições econômicas favoráveis. Pode haver necessidade de capital para expansão.',
+                    referencia='Verifique evaluate_p_ebitda para valuation, evaluate_fcf para geração de caixa e evaluate_beta para risco.',
+                    recomendacao='Considere investir, mas avalie a sustentabilidade do crescimento e a alavancagem financeira. Boa opção para investidores tolerantes a risco.'
+                )
+            # Verifica se CAGR excede 20%, indicando crescimento excepcional
+            elif cagr > 0.20:
+                # Retorna ResultadoIND para crescimento excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='CAGR > 20%',
+                    descricao='O CAGR indica crescimento excepcional dos lucros líquidos, típico de empresas em setores de alto crescimento, como tecnologia ou startups. Sugere forte potencial de valorização, mas pode vir acompanhado de maior volatilidade.',
+                    riscos='Risco de crescimento insustentável ou dependência de aportes de capital. Pode haver volatilidade significativa em setores de alto crescimento.',
+                    referencia='Avalie evaluate_wacc para custo de capital, evaluate_div_liquida_pl para alavancagem e evaluate_margem_liquida para lucratividade.',
+                    recomendacao='Considere investir, mas diversifique para mitigar riscos. Priorize empresas com fundamentos sólidos e geração de caixa.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o CAGR de Lucros: {mensagem}.
+                Verifique os dados de entrada (valor inicial, valor final, número de anos) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+
+# Define a classe CAGREvaluator para avaliar o indicador CAGR de Receitas 5 Anos
+class CAGREvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do CAGR
+    def __init__(self):
+        # Define string multilinha explicando o índice CAGR de Receitas
+        self.definicao = '''
+        O CAGR (Compound Annual Growth Rate) de Receitas 5 Anos é a taxa média de crescimento anual das receitas de uma empresa ao longo de cinco anos,
+        considerando o efeito da capitalização composta. Ele suaviza flutuações anuais, fornecendo uma visão estável do crescimento do faturamento.
+        É amplamente utilizado para avaliar a consistência do crescimento da empresa, comparar desempenho entre empresas e projetar resultados futuros.
+        Um CAGR alto indica crescimento robusto, enquanto um CAGR baixo ou negativo sugere estagnação ou declínio no faturamento.
+        '''
+        # Define a categoria de agrupamento como "Crescimento"
+        self.agrupador = 'Crescimento'
+        # Define a fórmula do CAGR
+        self.formula = '''
+        CAGR = (VF / VI)^(1/n) - 1
+        Onde:
+        - VF = Valor Final das receitas (ao final do período de 5 anos)
+        - VI = Valor Inicial das receitas (no início do período de 5 anos)
+        - n = Número de anos (neste caso, 5)
+        '''
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Calcula o CAGR com base nos valores inicial e final das receitas
+    def calcular_cagr(self, valor_inicial, valor_final, anos=5):
+        try:
+            # Verifica se as entradas são numéricas
+            for param, nome in [
+                (valor_inicial, "Valor Inicial"),
+                (valor_final, "Valor Final"),
+                (anos, "Número de Anos")
+            ]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte parâmetros para float
+            valor_inicial = float(valor_inicial)
+            valor_final = float(valor_final)
+            anos = float(anos)
+            # Verifica se o valor inicial é maior que zero
+            if valor_inicial <= 0:
+                raise ValueError("O valor inicial das receitas deve ser maior que zero.")
+            # Verifica se o número de anos é positivo
+            if anos <= 0:
+                raise ValueError("O número de anos deve ser maior que zero.")
+            # Calcula o CAGR
+            cagr = (valor_final / valor_inicial) ** (1 / anos) - 1
+            return cagr
+        except Exception as e:
+            raise ValueError(f"Erro ao calcular o CAGR: {str(e)}")
+
+    # Avalia o valor do CAGR e retorna um objeto ResultadoIND
+    def avaliar(self, valor_inicial, valor_final, anos=5):
+        # Tenta processar o cálculo do CAGR e a avaliação
+        try:
+            # Calcula o CAGR
+            cagr = self.calcular_cagr(valor_inicial, valor_final, anos)
+            # Verifica se CAGR é negativo, indicando declínio nas receitas
+            if cagr < 0:
+                # Retorna ResultadoIND para CAGR negativo
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='CAGR < 0%',
+                    descricao='Um CAGR negativo indica declínio nas receitas ao longo dos cinco anos. Isso sugere dificuldades operacionais, perda de mercado ou desafios setoriais, comprometendo a sustentabilidade financeira da empresa.',
+                    riscos='Risco de insustentabilidade financeira, perda de competitividade ou necessidade de reestruturação. Pode haver dependência de fatores externos adversos.',
+                    referencia='Avalie evaluate_margem_liquida para lucratividade, evaluate_div_liquida_ebitda para alavancagem e evaluate_fcf para geração de caixa.',
+                    recomendacao='Evite investir devido ao declínio nas receitas. Priorize análise de fundamentos operacionais e estratégias de recuperação.'
+                )
+            # Verifica se CAGR está entre 0 e 5%, indicando crescimento baixo
+            elif 0 <= cagr <= 0.05:
+                # Retorna ResultadoIND para crescimento baixo
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='0 <= CAGR <= 5%',
+                    descricao='O CAGR indica crescimento baixo das receitas, comum em setores maduros ou empresas com desafios de expansão. Sugere estabilidade, mas limitada capacidade de crescimento orgânico.',
+                    riscos='Risco de estagnação ou perda de competitividade em setores dinâmicos. Pode haver dependência de melhorias operacionais para sustentar margens.',
+                    referencia='Compare com evaluate_margem_ebitda para lucratividade, evaluate_roe para rentabilidade e evaluate_p_vpa para valuation.',
+                    recomendacao='Considere investir com cautela, priorizando empresas com margens sólidas ou potencial de melhoria operacional. Avalie o contexto setorial.'
+                )
+            # Verifica se CAGR está entre 5% e 10%, indicando crescimento moderado
+            elif 0.05 < cagr <= 0.10:
+                # Retorna ResultadoIND para crescimento moderado
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='5% < CAGR <= 10%',
+                    descricao='O CAGR indica crescimento moderado das receitas, típico de empresas em setores estáveis ou em fase de consolidação. Sugere equilíbrio entre crescimento e estabilidade, com potencial para ganhos consistentes.',
+                    riscos='Risco de competição setorial ou necessidade de investimentos para manter o crescimento. Pode haver sensibilidade a mudanças econômicas.',
+                    referencia='Analise evaluate_fcd para valuation, evaluate_liquidez_corrente para liquidez e evaluate_margem_bruta para eficiência.',
+                    recomendacao='Considere investir, especialmente se a empresa apresentar margens sólidas e boa gestão. Boa opção para investidores moderados.'
+                )
+            # Verifica se CAGR está entre 10% e 20%, indicando crescimento alto
+            elif 0.10 < cagr <= 0.20:
+                # Retorna ResultadoIND para crescimento alto
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='10% < CAGR <= 20%',
+                    descricao='O CAGR indica crescimento alto das receitas, comum em empresas em setores dinâmicos, como tecnologia ou varejo em expansão. Sugere forte capacidade de crescimento e atratividade para investidores.',
+                    riscos='Risco de volatilidade em setores competitivos ou dependência de condições econômicas favoráveis. Pode haver necessidade de capital para expansão.',
+                    referencia='Verifique evaluate_p_ebitda para valuation, evaluate_fcf para geração de caixa e evaluate_beta para risco.',
+                    recomendacao='Considere investir, mas avalie a sustentabilidade do crescimento e a alavancagem financeira. Boa opção para investidores tolerantes a risco.'
+                )
+            # Verifica se CAGR excede 20%, indicando crescimento excepcional
+            elif cagr > 0.20:
+                # Retorna ResultadoIND para crescimento excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='CAGR > 20%',
+                    descricao='O CAGR indica crescimento excepcional das receitas, típico de empresas em setores de alto crescimento, como tecnologia ou startups. Sugere forte potencial de valorização, mas pode vir acompanhado de maior volatilidade.',
+                    riscos='Risco de crescimento insustentável ou dependência de aportes de capital. Pode haver volatilidade significativa em setores de alto crescimento.',
+                    referencia='Avalie evaluate_wacc para custo de capital, evaluate_div_liquida_pl para alavancagem e evaluate_margem_liquida para lucratividade.',
+                    recomendacao='Considere investir, mas diversifique para mitigar riscos. Priorize empresas com fundamentos sólidos e geração de caixa.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o CAGR: {mensagem}.
+                Verifique os dados de entrada (valor inicial, valor final, número de anos) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+
+# Define a classe BetaEvaluator para avaliar o indicador Índice Beta
+class BetaEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do Beta
+    def __init__(self):
+        # Define string multilinha explicando o índice Beta
+        self.definicao = '''
+        O Índice Beta mede a volatilidade de uma ação em relação ao mercado, representando o risco sistemático (relacionado ao mercado)
+        de um investimento. É calculado como a covariância entre os retornos da ação e do mercado dividida pela variância dos retornos
+        do mercado. Um Beta de 1 indica que a ação acompanha o mercado; maior que 1 sugere maior volatilidade (mais risco); menor que 1
+        indica menor volatilidade (menos risco). É usado para avaliar o risco de portfólio e o custo do capital próprio (ex.: via CAPM).
+        '''
+        # Define a categoria de agrupamento como "Risco"
+        self.agrupador = 'Risco'
+        # Define a fórmula do Beta
+        self.formula = '''
+        Beta = Cov(Rₐ, Rₘ) / Var(Rₘ)
+        Onde:
+        - Rₐ = Retornos da ação
+        - Rₘ = Retornos do mercado
+        - Cov(Rₐ, Rₘ) = Covariância entre os retornos da ação e do mercado
+        - Var(Rₘ) = Variância dos retornos do mercado
+        '''
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Calcula o Beta com base nos retornos da ação e do mercado
+    def calcular_beta(self, retornos_acao, retornos_mercado):
+        try:
+            # Verifica se as entradas são listas ou tuplas numéricas com o mesmo tamanho
+            if not isinstance(retornos_acao, (list, tuple)) or not isinstance(retornos_mercado, (list, tuple)):
+                raise ValueError("Retornos da ação e do mercado devem ser listas ou tuplas.")
+            if len(retornos_acao) != len(retornos_mercado):
+                raise ValueError("Retornos da ação e do mercado devem ter o mesmo tamanho.")
+            if len(retornos_acao) < 2:
+                raise ValueError("É necessário pelo menos dois períodos de retornos para calcular o Beta.")
+            for r_a, r_m in zip(retornos_acao, retornos_mercado):
+                if not isinstance(r_a, (int, float)) and not (isinstance(r_a, str) and r_a.replace('.', '', 1).isdigit()):
+                    raise ValueError("Os retornos da ação devem ser numéricos.")
+                if not isinstance(r_m, (int, float)) and not (isinstance(r_m, str) and r_m.replace('.', '', 1).isdigit()):
+                    raise ValueError("Os retornos do mercado devem ser numéricos.")
+            # Converte retornos para float
+            retornos_acao = [float(r) for r in retornos_acao]
+            retornos_mercado = [float(r) for r in retornos_mercado]
+            # Calcula a média dos retornos
+            media_acao = sum(retornos_acao) / len(retornos_acao)
+            media_mercado = sum(retornos_mercado) / len(retornos_mercado)
+            # Calcula a covariância entre retornos da ação e do mercado
+            covariancia = sum((r_a - media_acao) * (r_m - media_mercado) for r_a, r_m in zip(retornos_acao, retornos_mercado)) / (len(retornos_acao) - 1)
+            # Calcula a variância dos retornos do mercado
+            variancia_mercado = sum((r_m - media_mercado) ** 2 for r_m in retornos_mercado) / (len(retornos_mercado) - 1)
+            if variancia_mercado == 0:
+                raise ValueError("A variância dos retornos do mercado não pode ser zero.")
+            # Calcula o Beta
+            beta = covariancia / variancia_mercado
+            return beta
+        except Exception as e:
+            raise ValueError(f"Erro ao calcular o Beta: {str(e)}")
+
+    # Avalia o valor do Beta e retorna um objeto ResultadoIND
+    def avaliar(self, retornos_acao, retornos_mercado):
+        # Tenta processar o cálculo do Beta e a avaliação
+        try:
+            # Calcula o Beta
+            beta = self.calcular_beta(retornos_acao, retornos_mercado)
+            # Verifica se Beta é negativo, indicando comportamento atípico
+            if beta < 0:
+                # Retorna ResultadoIND para Beta negativo
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='Beta < 0',
+                    descricao='Um Beta negativo indica que a ação se move em direção oposta ao mercado, um comportamento atípico. Comum em ativos de proteção, como ouro, ou em empresas com retornos erráticos, sugere incerteza elevada ou dados inconsistentes.',
+                    riscos='Risco de comportamento imprevisível ou dados históricos não confiáveis. Pode haver dificuldades em usar o Beta para estimar o custo do capital.',
+                    referencia='Avalie evaluate_wacc para custo de capital, evaluate_fcd para valuation e evaluate_roe para rentabilidade.',
+                    recomendacao='Evite usar o Beta para decisões de investimento até validar os dados históricos. Considere outros indicadores de risco e fundamentos.'
+                )
+            # Verifica se Beta está entre 0 e 0.8, indicando baixo risco
+            elif 0 <= beta < 0.8:
+                # Retorna ResultadoIND para baixo risco
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='0 <= Beta < 0.8',
+                    descricao='O Beta é baixo, indicando que a ação é menos volátil que o mercado. Comum em empresas estáveis, como utilities ou bens de consumo, sugere menor risco sistemático e maior segurança para investidores avessos a risco.',
+                    riscos='Risco de retornos limitados em mercados de alta. Pode haver menor potencial de valorização em cenários de crescimento.',
+                    referencia='Compare com evaluate_wacc para custo de capital, evaluate_div_liquida_ebitda para alavancagem e evaluate_margem_liquida para lucratividade.',
+                    recomendacao='Considere investir, especialmente para portfólios defensivos. Boa opção para investidores que buscam estabilidade e baixo risco.'
+                )
+            # Verifica se Beta está entre 0.8 e 1.2, indicando risco moderado
+            elif 0.8 <= beta <= 1.2:
+                # Retorna ResultadoIND para risco moderado
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='0.8 <= Beta <= 1.2',
+                    descricao='O Beta está próximo de 1, indicando que a ação acompanha a volatilidade do mercado. Comum em empresas de setores maduros, como indústria ou varejo, sugere um equilíbrio entre risco e retorno, adequado para investidores com tolerância moderada.',
+                    riscos='Risco de exposição a flutuações de mercado. Pode haver sensibilidade a choques econômicos ou eventos macroeconômicos.',
+                    referencia='Verifique evaluate_p_vpa para valuation, evaluate_roe para rentabilidade e evaluate_liquidez_corrente para liquidez.',
+                    recomendacao='Considere investir, mas diversifique para mitigar riscos de mercado. Boa opção para investidores que buscam equilíbrio.'
+                )
+            # Verifica se Beta está entre 1.2 e 2, indicando alto risco
+            elif 1.2 < beta <= 2:
+                # Retorna ResultadoIND para alto risco
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='1.2 < Beta <= 2',
+                    descricao='O Beta é alto, indicando que a ação é mais volátil que o mercado. Comum em setores cíclicos ou de crescimento, como tecnologia ou consumo discricionário, sugere maior risco sistemático, mas também maior potencial de retorno em mercados de alta.',
+                    riscos='Risco de perdas significativas em mercados de baixa. Pode haver dependência de condições econômicas favoráveis.',
+                    referencia='Analise evaluate_fcd para valuation, evaluate_div_liquida_ebitda para alavancagem e evaluate_margem_ebitda para lucratividade.',
+                    recomendacao='Considere investir com cautela, apenas se tolerar alta volatilidade. Diversifique e monitore condições de mercado.'
+                )
+            # Verifica se Beta excede 2, indicando risco muito alto
+            elif beta > 2:
+                # Retorna ResultadoIND para risco muito alto
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='Beta > 2',
+                    descricao='O Beta é extremamente alto, indicando volatilidade extrema em relação ao mercado. Comum em empresas especulativas ou em setores de alto risco, sugere risco sistemático elevado e exposição significativa a flutuações de mercado.',
+                    riscos='Risco de perdas substanciais em cenários adversos. Pode haver instabilidade financeira ou dependência de eventos especulativos.',
+                    referencia='Avalie evaluate_wacc para custo de capital, evaluate_fcf para geração de caixa e evaluate_p_l para valuation.',
+                    recomendacao='Evite investir devido ao alto risco sistemático. Considere apenas para portfólios especulativos com alta diversificação.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o Beta: {mensagem}.
+                Verifique os dados de entrada (retornos da ação e do mercado) e assegure que sejam numéricos válidos e com tamanho suficiente.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+# Define a classe WACCEvaluator para avaliar o indicador Custo Médio Ponderado de Capital
+class WACCEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do WACC
+    def __init__(self):
+        # Define string multilinha explicando o índice WACC
+        self.definicao = '''
+        O WACC (Weighted Average Cost of Capital) é o custo médio ponderado do capital próprio (equity) e da dívida, ajustado pela
+        estrutura de capital da empresa. É calculado como a soma do custo do capital próprio (ponderado pela proporção de equity) e
+        do custo da dívida (ponderado pela proporção de dívida, ajustado pela dedução fiscal). O WACC representa a taxa mínima de retorno
+        exigida pelos investidores e é usado como taxa de desconto em avaliações como o Fluxo de Caixa Descontado (FCD). Um WACC baixo
+        sugere financiamento acessível, enquanto um WACC alto indica maior risco ou custo elevado de capital.
+        '''
+        # Define a categoria de agrupamento como "Estrutura de Capital"
+        self.agrupador = 'Estrutura de Capital'
+        # Define a fórmula do WACC
+        self.formula = '''
+        WACC = (E/V) × Re + (D/V) × Rd × (1 - Tc)
+        Onde:
+        - E = Valor de mercado do capital próprio (equity)
+        - D = Valor de mercado da dívida
+        - V = E + D (valor total da empresa)
+        - Re = Custo do capital próprio (ex.: estimado pelo CAPM)
+        - Rd = Custo da dívida (ex.: taxa de juros média)
+        - Tc = Taxa de imposto (alíquota efetiva, para dedução fiscal dos juros)
+        '''
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Calcula o WACC com base nos parâmetros fornecidos
+    def calcular_wacc(self, equity, divida, custo_equity, custo_divida, taxa_imposto):
+        try:
+            # Verifica se todas as entradas são numéricas
+            for param, nome in [
+                (equity, "Equity"),
+                (divida, "Dívida"),
+                (custo_equity, "Custo do Equity"),
+                (custo_divida, "Custo da Dívida"),
+                (taxa_imposto, "Taxa de Imposto")
+            ]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte parâmetros para float
+            equity = float(equity)
+            divida = float(divida)
+            custo_equity = float(custo_equity)
+            custo_divida = float(custo_divida)
+            taxa_imposto = float(taxa_imposto)
+            # Calcula o valor total (V = E + D)
+            valor_total = equity + divida
+            if valor_total == 0:
+                raise ValueError("O valor total (Equity + Dívida) não pode ser zero.")
+            # Calcula as proporções de equity e dívida
+            proporcao_equity = equity / valor_total
+            proporcao_divida = divida / valor_total
+            # Calcula o WACC
+            wacc = (proporcao_equity * custo_equity) + (proporcao_divida * custo_divida * (1 - taxa_imposto))
+            return wacc
+        except Exception as e:
+            raise ValueError(f"Erro ao calcular o WACC: {str(e)}")
+
+    # Avalia o valor do WACC e retorna um objeto ResultadoIND
+    def avaliar(self, equity, divida, custo_equity, custo_divida, taxa_imposto):
+        # Tenta processar o cálculo do WACC e a avaliação
+        try:
+            # Calcula o WACC
+            wacc = self.calcular_wacc(equity, divida, custo_equity, custo_divida, taxa_imposto)
+            # Verifica se WACC é negativo ou inválido
+            if wacc < 0:
+                # Retorna ResultadoIND para WACC inválido
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='WACC < 0',
+                    descricao='Um WACC negativo é inválido e indica erro nos dados de entrada, como custos de capital negativos ou premissas incorretas. Reflete problemas na estrutura de capital ou cálculos, tornando a análise de valuation não confiável.',
+                    riscos='Risco de premissas financeiras incorretas ou dados inconsistentes. Pode comprometer análises de FCD ou decisões de investimento.',
+                    referencia='Avalie evaluate_fcd para valuation, evaluate_div_liquida_ebitda para alavancagem e evaluate_roe para rentabilidade.',
+                    recomendacao='Revise os dados de entrada (equity, dívida, custos, taxa de imposto) antes de prosseguir com análises financeiras. Evite decisões de investimento.'
+                )
+            # Verifica se WACC está entre 0 e 5%, indicando custo de capital muito baixo
+            elif 0 <= wacc <= 0.05:
+                # Retorna ResultadoIND para custo de capital muito baixo
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='0 <= WACC <= 5%',
+                    descricao='O WACC é muito baixo, indicando um custo de capital extremamente acessível. Comum em empresas com baixa alavancagem ou em setores estáveis com acesso a dívida barata, sugere alta atratividade para investimentos e facilidade de financiamento.',
+                    riscos='Risco de subestimação do custo do equity ou dívida, ou premissas otimistas. Pode haver dependência de condições de mercado favoráveis.',
+                    referencia='Compare com evaluate_fcd para valuation, evaluate_div_liquida_pl para alavancagem e evaluate_margem_ebitda para lucratividade.',
+                    recomendacao='Considere investir, mas valide as premissas do WACC e a sustentabilidade do custo de capital. Boa opção para investidores que buscam baixo risco.'
+                )
+            # Verifica se WACC está entre 5% e 8%, indicando custo de capital baixo
+            elif 0.05 < wacc <= 0.08:
+                # Retorna ResultadoIND para custo de capital baixo
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='5% < WACC <= 8%',
+                    descricao='O WACC é baixo, indicando um custo de capital acessível. Comum em empresas estáveis, como bens de consumo ou utilities, sugere boa capacidade de financiamento com risco moderado, sendo atraente para investidores.',
+                    riscos='Risco de aumento nos custos de capital em cenários de alta de juros ou volatilidade de mercado. Pode haver dependência de dívida barata.',
+                    referencia='Analise evaluate_fcd para valuation, evaluate_div_liquida_ebitda para alavancagem e evaluate_roe para rentabilidade.',
+                    recomendacao='Considere investir, mas monitore mudanças nas taxas de juros e no custo do equity. Boa opção para investidores que buscam equilíbrio.'
+                )
+            # Verifica se WACC está entre 8% e 12%, indicando custo de capital moderado
+            elif 0.08 < wacc <= 0.12:
+                # Retorna ResultadoIND para custo de capital moderado
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='8% < WACC <= 12%',
+                    descricao='O WACC está em uma faixa moderada, indicando um custo de capital típico para empresas em setores competitivos, como tecnologia ou manufatura. Sugere equilíbrio entre risco e retorno, mas com necessidade de geração de caixa robusta para cobrir o custo.',
+                    riscos='Risco de aumento no custo de capital em cenários econômicos adversos. Pode haver pressão para melhorar a eficiência operacional.',
+                    referencia='Verifique evaluate_fcd para valuation, evaluate_margem_liquida para lucratividade e evaluate_liquidez_corrente para liquidez.',
+                    recomendacao='Considere investir com cautela, avaliando a capacidade de geração de caixa e a estabilidade do setor. Boa opção para investidores tolerantes a risco moderado.'
+                )
+            # Verifica se WACC está entre 12% e 15%, indicando custo de capital alto
+            elif 0.12 < wacc <= 0.15:
+                # Retorna ResultadoIND para custo de capital alto
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='12% < WACC <= 15%',
+                    descricao='O WACC é alto, indicando um custo de capital elevado. Comum em empresas com alta alavancagem ou em setores voláteis, como startups ou cíclicos, sugere maior risco para investidores e necessidade de retornos elevados para justificar investimentos.',
+                    riscos='Risco de dificuldades em financiar projetos ou pagar dívidas. Pode haver dependência de capital caro ou volatilidade no custo do equity.',
+                    referencia='Analise evaluate_div_liquida_ebitda para alavancagem, evaluate_fcf para geração de caixa e evaluate_p_ebitda para valuation.',
+                    recomendacao='Evite investir a menos que a empresa demonstre forte geração de caixa ou potencial de crescimento. Priorize análise de risco e retorno.'
+                )
+            # Verifica se WACC excede 15%, indicando custo de capital muito alto
+            elif wacc > 0.15:
+                # Retorna ResultadoIND para custo de capital muito alto
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='WACC > 15%',
+                    descricao='O WACC é extremamente alto, indicando um custo de capital muito elevado. Comum em empresas em setores de alto risco ou com estrutura de capital instável, sugere dificuldades significativas em financiar operações ou projetos, com alto risco para investidores.',
+                    riscos='Risco de insolvência, necessidade de capital caro ou diluição acionária. Pode haver má gestão financeira ou exposição a mercados voláteis.',
+                    referencia='Avalie evaluate_div_liquida_pl para alavancagem, evaluate_fcd para valuation e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Evite investir devido ao alto custo de capital e risco financeiro. Priorize análise de reestruturação financeira e fundamentos operacionais.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o WACC: {mensagem}.
+                Verifique os dados de entrada (Equity, Dívida, Custo do Equity, Custo da Dívida, Taxa de Imposto) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+# Define a classe FCDEvaluator para avaliar o indicador Fluxo de Caixa Descontado
+class FCDEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do FCD
+    def __init__(self):
+        # Define string multilinha explicando o índice Fluxo de Caixa Descontado
+        self.definicao = '''
+        O Fluxo de Caixa Descontado (FCD) é uma metodologia de valuation que estima o valor intrínseco de uma empresa somando o valor presente
+        dos Fluxos de Caixa Livres para a Firma (FCFF) projetados para um período explícito (ex.: 5 anos) e um valor terminal, descontados pelo
+        Custo Médio Ponderado de Capital (WACC). O FCD reflete o valor econômico da empresa, considerando sua capacidade de gerar caixa futuro.
+        Um FCD maior que o valor de mercado sugere subvalorização, enquanto um FCD menor indica sobrevalorização.
+        '''
+        # Define a categoria de agrupamento como "Valuation"
+        self.agrupador = 'Valuation'
+        # Define a fórmula do FCD
+        self.formula = '''
+        FCD = Σ [FCFFₜ / (1 + WACC)ᵗ] + Valor Terminal / (1 + WACC)ⁿ
+        Onde:
+        - FCFFₜ = Fluxo de Caixa Livre para a Firma no ano t
+        - WACC = Custo Médio Ponderado de Capital
+        - Valor Terminal = FCFFₙ₊₁ / (WACC - g), onde g é a taxa de crescimento perpétuo
+        - n = número de anos no período explícito
+        FCFF = EBIT × (1 - Taxa de Imposto) + Depreciação e Amortização - Variação no Capital de Giro - CAPEX
+        '''
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Calcula o Fluxo de Caixa Livre para a Firma (FCFF) para um único ano
+    def calcular_fcff(self, ebit, taxa_imposto, depreciacao_amortizacao, variacao_capital_giro, capex):
+        try:
+            # Verifica se todas as entradas são numéricas
+            for param, nome in [
+                (ebit, "EBIT"),
+                (taxa_imposto, "Taxa de Imposto"),
+                (depreciacao_amortizacao, "Depreciação e Amortização"),
+                (variacao_capital_giro, "Variação no Capital de Giro"),
+                (capex, "CAPEX")
+            ]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte parâmetros para float
+            ebit = float(ebit)
+            taxa_imposto = float(taxa_imposto)
+            depreciacao_amortizacao = float(depreciacao_amortizacao)
+            variacao_capital_giro = float(variacao_capital_giro)
+            capex = float(capex)
+            # Calcula o FCFF
+            fcff = (ebit * (1 - taxa_imposto)) + depreciacao_amortizacao - variacao_capital_giro - capex
+            return fcff
+        except Exception as e:
+            raise ValueError(f"Erro ao calcular o FCFF: {str(e)}")
+
+    # Calcula o Fluxo de Caixa Descontado (FCD)
+    def calcular_fcd(self, fcffs_projetados, wacc, taxa_crescimento_perpetuo, anos_projetados):
+        try:
+            # Verifica se as entradas são válidas
+            if not isinstance(fcffs_projetados, (list, tuple)) or len(fcffs_projetados) != anos_projetados:
+                raise ValueError("fcffs_projetados deve ser uma lista com tamanho igual a anos_projetados.")
+            for fcff in fcffs_projetados:
+                if not isinstance(fcff, (int, float)) and not (isinstance(fcff, str) and fcff.replace('.', '', 1).isdigit()):
+                    raise ValueError("Cada FCFF projetado deve ser numérico.")
+            if not isinstance(wacc, (int, float)) and not (isinstance(wacc, str) and wacc.replace('.', '', 1).isdigit()):
+                raise ValueError("O WACC deve ser numérico.")
+            if not isinstance(taxa_crescimento_perpetuo, (int, float)) and not (isinstance(taxa_crescimento_perpetuo, str) and taxa_crescimento_perpetuo.replace('.', '', 1).isdigit()):
+                raise ValueError("A taxa de crescimento perpétuo deve ser numérica.")
+            if not isinstance(anos_projetados, int) or anos_projetados <= 0:
+                raise ValueError("anos_projetados deve ser um inteiro positivo.")
+            # Converte parâmetros para float
+            wacc = float(wacc)
+            taxa_crescimento_perpetuo = float(taxa_crescimento_perpetuo)
+            fcffs_projetados = [float(fcff) for fcff in fcffs_projetados]
+            # Verifica se WACC > taxa de crescimento perpétuo
+            if wacc <= taxa_crescimento_perpetuo:
+                raise ValueError("O WACC deve ser maior que a taxa de crescimento perpétuo para calcular o valor terminal.")
+            # Calcula o valor presente dos FCFFs projetados
+            valor_presente_fcffs = 0
+            for t in range(1, anos_projetados + 1):
+                valor_presente_fcffs += fcffs_projetados[t - 1] / ((1 + wacc) ** t)
+            # Calcula o valor terminal (perpetuidade)
+            fcff_terminal = fcffs_projetados[-1] * (1 + taxa_crescimento_perpetuo)
+            valor_terminal = fcff_terminal / (wacc - taxa_crescimento_perpetuo)
+            # Desconta o valor terminal para o presente
+            valor_terminal_presente = valor_terminal / ((1 + wacc) ** anos_projetados)
+            # Calcula o FCD total
+            fcd = valor_presente_fcffs + valor_terminal_presente
+            return fcd
+        except Exception as e:
+            raise ValueError(f"Erro ao calcular o FCD: {str(e)}")
+
+    # Avalia o FCD em relação ao valor de mercado (Enterprise Value) e retorna um objeto ResultadoIND
+    def avaliar(self, fcffs_projetados, wacc, taxa_crescimento_perpetuo, anos_projetados, enterprise_value):
+        # Tenta processar o cálculo do FCD e a avaliação
+        try:
+            # Verifica se Enterprise Value é numérico
+            if not isinstance(enterprise_value, (int, float)) and not (isinstance(enterprise_value, str) and enterprise_value.replace('.', '', 1).isdigit()):
+                raise ValueError("O valor do Enterprise Value deve ser numérico.")
+            # Converte Enterprise Value para float
+            enterprise_value = float(enterprise_value)
+            # Calcula o FCD
+            fcd = self.calcular_fcd(fcffs_projetados, wacc, taxa_crescimento_perpetuo, anos_projetados)
+            # Calcula a proporção FCD/EV
+            if enterprise_value == 0:
+                raise ValueError("O Enterprise Value não pode ser zero para calcular a proporção FCD/EV.")
+            proporcao_fcd_ev = fcd / enterprise_value
+            # Verifica se FCD é negativo, indicando projeções inválidas
+            if fcd < 0:
+                # Retorna ResultadoIND para FCD negativo
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='FCD < 0',
+                    descricao='Um FCD negativo indica projeções de fluxo de caixa inválidas ou insustentáveis, sugerindo problemas graves nas operações ou premissas irrealistas. Comum em empresas em crise ou com projeções excessivamente pessimistas, reflete alto risco de investimento.',
+                    riscos='Risco de insolvência, projeções não confiáveis ou má gestão operacional. Pode haver erros nas premissas de crescimento ou CAPEX elevado.',
+                    referencia='Avalie evaluate_fcf para geração de caixa, evaluate_ebitda para lucratividade operacional e evaluate_div_liquida_ebitda para alavancagem.',
+                    recomendacao='Evite investir até que as projeções sejam revisadas e validadas. Priorize análise de fluxo de caixa histórico e fundamentos operacionais.'
+                )
+            # Verifica se FCD/EV está abaixo de 0.8, indicando sobrevalorização
+            elif proporcao_fcd_ev < 0.8:
+                # Retorna ResultadoIND para sobrevalorização
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='FCD/EV < 0.8',
+                    descricao='O FCD é significativamente menor que o valor de mercado, sugerindo que a empresa está sobrevalorizada. Comum em empresas com altas expectativas de mercado ou setores inflacionados, indica que o preço atual pode não ser justificado pelos fluxos de caixa futuros.',
+                    riscos='Risco de correção no preço da ação ou bolha de mercado. Pode haver dependência de premissas otimistas não sustentadas pelos fundamentos.',
+                    referencia='Compare com evaluate_p_ebitda para valuation, evaluate_margem_liquida para lucratividade e evaluate_roe para rentabilidade patrimonial.',
+                    recomendacao='Evite investir devido à possível sobrevalorização. Considere esperar por uma correção de preço ou valide as projeções de crescimento.'
+                )
+            # Verifica se FCD/EV está entre 0.8 e 1.2, indicando valuation justo
+            elif 0.8 <= proporcao_fcd_ev <= 1.2:
+                # Retorna ResultadoIND para valuation justo
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='0.8 <= FCD/EV <= 1.2',
+                    descricao='O FCD está alinhado com o valor de mercado, indicando que a empresa está justamente precificada. Comum em empresas estáveis, como bens de consumo ou manufatura, sugere que o preço reflete adequadamente os fluxos de caixa futuros projetados.',
+                    riscos='Risco de estagnação no preço se as projeções de crescimento não se concretizarem. Pode haver sensibilidade a mudanças no WACC ou taxa de crescimento.',
+                    referencia='Verifique evaluate_p_vpa para valuation, evaluate_giro_ativo para eficiência e evaluate_liquidez_corrente para liquidez.',
+                    recomendacao='Considere investir, mas avalie a consistência das projeções e a estabilidade do setor. Boa opção para investidores que buscam equilíbrio.'
+                )
+            # Verifica se FCD/EV está entre 1.2 e 2, indicando subvalorização
+            elif 1.2 < proporcao_fcd_ev <= 2:
+                # Retorna ResultadoIND para subvalorização
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='1.2 < FCD/EV <= 2',
+                    descricao='O FCD é significativamente maior que o valor de mercado, indicando que a empresa está subvalorizada. Comum em empresas com forte geração de caixa ou setores subestimados, sugere oportunidade de investimento com potencial de valorização.',
+                    riscos='Risco de projeções otimistas ou fundamentos frágeis não refletidos no FCD. Pode haver incertezas no setor ou má percepção do mercado.',
+                    referencia='Combine com evaluate_p_l para valuation, evaluate_fcf para geração de caixa e evaluate_margem_ebitda para lucratividade operacional.',
+                    recomendacao='Considere investir, mas valide as projeções de fluxo de caixa e fundamentos operacionais. Boa opção para investidores de valor.'
+                )
+            # Verifica se FCD/EV excede 2, indicando forte subvalorização
+            elif proporcao_fcd_ev > 2:
+                # Retorna ResultadoIND para forte subvalorização
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='FCD/EV > 2',
+                    descricao='O FCD é muito superior ao valor de mercado, indicando forte subvalorização. Típico de empresas com fluxos de caixa robustos ou mercados subestimados, sugere uma oportunidade significativa de valorização, especialmente em setores cíclicos ou em recuperação.',
+                    riscos='Risco de projeções excessivamente otimistas ou ativos de baixa qualidade. Pode haver volatilidade de mercado ou incertezas setoriais.',
+                    referencia='Analise evaluate_p_vpa para valuation, evaluate_roe para rentabilidade patrimonial e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Invista se as projeções forem robustas e os fundamentos suportarem a subvalorização. Diversifique para mitigar riscos de projeção.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o Fluxo de Caixa Descontado: {mensagem}.
+                Verifique os dados de entrada (FCFFs projetados, WACC, taxa de crescimento perpétuo, anos projetados, Enterprise Value) e assegure que sejam válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+# Define a classe FCFEvaluator para avaliar o indicador Fluxo de Caixa Livre
+class FCFEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do FCF
+    def __init__(self):
+        # Define string multilinha explicando o índice Fluxo de Caixa Livre
+        self.definicao = '''
+        O Fluxo de Caixa Livre (FCF) representa o caixa gerado pelas operações da empresa após deduzir os gastos de capital (CAPEX)
+        e as variações no capital de giro, mas antes de pagamentos de juros ou dividendos. É calculado como EBIT ajustado por impostos,
+        mais depreciação e amortização, menos variações no capital de giro e CAPEX. É um indicador de saúde financeira que mostra a
+        capacidade da empresa de gerar caixa para acionistas, redução de dívidas ou reinvestimento. Valores altos sugerem robustez financeira,
+        enquanto valores baixos ou negativos indicam fragilidade ou necessidade de financiamento.
+        '''
+        # Define a categoria de agrupamento como "Geração de Caixa"
+        self.agrupador = 'Geração de Caixa'
+        # Define a fórmula do FCF
+        self.formula = '''
+        FCF = EBIT × (1 - Taxa de Imposto) + Depreciação e Amortização - Variação no Capital de Giro - CAPEX
+        Onde:
+        - EBIT: Lucro antes de juros e impostos
+        - Taxa de Imposto: Alíquota efetiva de imposto
+        - Depreciação e Amortização: Despesas não-caixa
+        - Variação no Capital de Giro: Mudança nos ativos e passivos circulantes
+        - CAPEX: Gastos de capital em ativos fixos
+        '''
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Calcula o Fluxo de Caixa Livre com base nos parâmetros fornecidos
+    def calcular_fcf(self, ebit, taxa_imposto, depreciacao_amortizacao, variacao_capital_giro, capex):
+        try:
+            # Verifica se todas as entradas são numéricas
+            for param, nome in [
+                (ebit, "EBIT"),
+                (taxa_imposto, "Taxa de Imposto"),
+                (depreciacao_amortizacao, "Depreciação e Amortização"),
+                (variacao_capital_giro, "Variação no Capital de Giro"),
+                (capex, "CAPEX")
+            ]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte todos os parâmetros para float
+            ebit = float(ebit)
+            taxa_imposto = float(taxa_imposto)
+            depreciacao_amortizacao = float(depreciacao_amortizacao)
+            variacao_capital_giro = float(variacao_capital_giro)
+            capex = float(capex)
+            # Calcula o FCF
+            fcf = (ebit * (1 - taxa_imposto)) + depreciacao_amortizacao - variacao_capital_giro - capex
+            return fcf
+        except Exception as e:
+            raise ValueError(f"Erro ao calcular o FCF: {str(e)}")
+
+    # Avalia o valor do FCF em relação à Receita Líquida e retorna um objeto ResultadoIND
+    def avaliar(self, ebit, taxa_imposto, depreciacao_amortizacao, variacao_capital_giro, capex, receita_liquida):
+        # Tenta processar o cálculo do FCF e a avaliação
+        try:
+            # Verifica se Receita Líquida é numérica
+            if not isinstance(receita_liquida, (int, float)) and not (isinstance(receita_liquida, str) and receita_liquida.replace('.', '', 1).isdigit()):
+                raise ValueError("O valor da Receita Líquida deve ser numérico.")
+            # Converte Receita Líquida para float
+            receita_liquida = float(receita_liquida)
+            # Calcula o FCF
+            fcf = self.calcular_fcf(ebit, taxa_imposto, depreciacao_amortizacao, variacao_capital_giro, capex)
+            # Calcula a margem de FCF (FCF / Receita Líquida)
+            if receita_liquida == 0:
+                raise ValueError("A Receita Líquida não pode ser zero para calcular a margem de FCF.")
+            margem_fcf = fcf / receita_liquida
+            # Verifica se FCF é negativo, indicando problemas financeiros
+            if margem_fcf < 0:
+                # Retorna ResultadoIND para FCF negativo
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='FCF < 0',
+                    descricao='Um FCF negativo indica que a empresa não gera caixa suficiente após despesas operacionais e investimentos, sugerindo dependência de financiamento externo ou queima de caixa. Comum em empresas em crise ou em fase de crescimento intensivo, reflete alto risco financeiro.',
+                    riscos='Risco de insolvência, necessidade de capital externo ou diluição acionária. Pode haver ineficiência operacional ou investimentos excessivos.',
+                    referencia='Avalie evaluate_ebitda para geração de caixa operacional, evaluate_div_liquida_ebitda para alavancagem e evaluate_liquidez_corrente para liquidez.',
+                    recomendacao='Evite investir até que a empresa demonstre recuperação na geração de caixa. Priorize análise de CAPEX e estratégias de eficiência.'
+                )
+            # Verifica se a margem FCF está entre 0 e 5%, indicando geração de caixa baixa
+            elif 0 <= margem_fcf <= 0.05:
+                # Retorna ResultadoIND para geração de caixa baixa
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='0 <= Margem FCF <= 5%',
+                    descricao='A margem de FCF é baixa, indicando geração de caixa limitada em relação à receita. Comum em setores com altos investimentos ou capital de giro elevado, como indústria pesada, sugere eficiência reduzida na conversão de receita em caixa livre.',
+                    riscos='Risco de dificuldades em financiar dividendos, reduzir dívidas ou reinvestir. Pode haver dependência de financiamento ou CAPEX elevado.',
+                    referencia='Analise evaluate_margem_ebitda para lucratividade operacional, evaluate_giro_ativo para eficiência e evaluate_div_liquida_ebitda para alavancagem.',
+                    recomendacao='Considere investir com cautela, avaliando a gestão de CAPEX e capital de giro. Priorize empresas com planos de melhoria na geração de caixa.'
+                )
+            # Verifica se a margem FCF está entre 5% e 10%, indicando geração de caixa moderada
+            elif 0.05 < margem_fcf <= 0.10:
+                # Retorna ResultadoIND para geração de caixa moderada
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='5% < Margem FCF <= 10%',
+                    descricao='A margem de FCF está em uma faixa moderada, indicando eficiência razoável na geração de caixa livre. Comum em empresas estáveis, como varejo ou manufatura, sugere capacidade de cobrir despesas e investimentos, mas com espaço para melhorias.',
+                    riscos='Risco de estagnação na geração de caixa em cenários de aumento de CAPEX ou custos. Pode haver dependência de mercados específicos.',
+                    referencia='Compare com evaluate_margem_liquida para lucratividade, evaluate_ccc para eficiência de capital de giro e evaluate_roe para rentabilidade.',
+                    recomendacao='Considere investir, mas avalie a sustentabilidade da geração de caixa e estratégias de crescimento. Boa opção para investidores que buscam estabilidade.'
+                )
+            # Verifica se a margem FCF está entre 10% e 20%, indicando boa geração de caixa
+            elif 0.10 < margem_fcf <= 0.20:
+                # Retorna ResultadoIND para boa geração de caixa
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='10% < Margem FCF <= 20%',
+                    descricao='A margem de FCF é alta, indicando boa geração de caixa livre em relação à receita. Comum em empresas com operações eficientes, como bens de consumo ou tecnologia, sugere forte capacidade de financiar dividendos, reduzir dívidas ou reinvestir.',
+                    riscos='Risco de dependência de mercados específicos ou sazonalidade na receita. Pode haver vulnerabilidade a aumentos no CAPEX.',
+                    referencia='Verifique evaluate_margem_ebitda para lucratividade operacional, evaluate_p_ebitda para valuation e evaluate_liquidez_seca para liquidez.',
+                    recomendacao='Considere investir, mas monitore a consistência do fluxo de caixa e exposição a riscos de mercado. Boa opção para investidores que buscam eficiência.'
+                )
+            # Verifica se a margem FCF excede 20%, indicando geração de caixa excepcional
+            elif margem_fcf > 0.20:
+                # Retorna ResultadoIND para geração de caixa excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='Margem FCF > 20%',
+                    descricao='A margem de FCF é extremamente alta, indicando geração de caixa excepcional. Típico de empresas com modelos de negócios eficientes, como tecnologia ou serviços especializados, sugere forte competitividade e flexibilidade financeira para crescimento ou dividendos.',
+                    riscos='Risco de caixa ocioso ou margens insustentáveis em mercados saturados. Pode haver dependência de receitas voláteis.',
+                    referencia='Combine com evaluate_margem_liquida para lucratividade, evaluate_roe para rentabilidade patrimonial e evaluate_p_ebitda para valuation.',
+                    recomendacao='Invista se os fundamentos suportarem a robustez financeira, mas diversifique para mitigar riscos de mercado. Considere empresas com crescimento sustentável.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o Fluxo de Caixa Livre: {mensagem}.
+                Verifique os dados de entrada (EBIT, Taxa de Imposto, Depreciação e Amortização, Variação no Capital de Giro, CAPEX, Receita Líquida) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+# Define a classe CCCEvaluator para avaliar o indicador Ciclo de Conversão de Caixa
+class CCCEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição do CCC
+    def __init__(self):
+        # Define string multilinha explicando o índice Ciclo de Conversão de Caixa
+        self.definicao = '''
+        O Ciclo de Conversão de Caixa (CCC) mede o tempo (em dias) necessário para uma empresa converter seus investimentos em estoques
+        e contas a receber em caixa, menos o tempo que leva para pagar seus fornecedores. É calculado como (Período Médio de Estoques +
+        Período Médio de Recebíveis - Período Médio de Pagamento). É um indicador de eficiência operacional que avalia a gestão do capital
+        de giro. Um CCC baixo indica alta eficiência, enquanto um CCC alto sugere ineficiência ou necessidade de capital elevado.
+        '''
+        # Define a categoria de agrupamento como "Eficiência Operacional"
+        self.agrupador = 'Eficiência Operacional'
+        # Define a fórmula do CCC
+        self.formula = '''
+        CCC = (Período Médio de Estoques + Período Médio de Recebíveis - Período Médio de Pagamento)
+        Onde:
+        - Período Médio de Estoques = (Estoque Médio / Custo dos Bens Vendidos) * 365
+        - Período Médio de Recebíveis = (Contas a Receber Médias / Receita Líquida) * 365
+        - Período Médio de Pagamento = (Contas a Pagar Médias / Custo dos Bens Vendidos) * 365
+        '''
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+
+        return wrapper
+
+    # Avalia o valor do Ciclo de Conversão de Caixa e retorna um objeto ResultadoIND
+    def avaliar(self, ccc):
+        # Tenta processar o valor do CCC
+        try:
+            # Verifica se a entrada é numérica (int ou float) ou uma string que pode ser convertida
+            if not isinstance(ccc, (int, float)) and not (isinstance(ccc, str) and ccc.replace('.', '', 1).isdigit()):
+                raise ValueError("O valor do CCC deve ser numérico.")
+            # Converte CCC para float
+            ccc = float(ccc)
+            # Verifica se CCC é negativo, indicando eficiência excepcional
+            if ccc < 0:
+                # Retorna ResultadoIND para CCC negativo
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='CCC < 0 dias',
+                    descricao='Um CCC negativo indica que a empresa recebe pagamentos de clientes antes de pagar fornecedores, sugerindo eficiência excepcional na gestão do capital de giro. Comum em empresas com forte poder de negociação, como varejo ou tecnologia, reflete robustez operacional.',
+                    riscos='Risco de dependência de termos de pagamento agressivos com fornecedores, que podem ser insustentáveis. Pode haver pressão de fornecedores no longo prazo.',
+                    referencia='Analise evaluate_giro_ativo para eficiência, evaluate_liquidez_corrente para liquidez e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Considere investir, mas avalie a sustentabilidade dos termos de pagamento e a qualidade dos recebíveis. Boa opção para investidores que buscam eficiência operacional.'
+                )
+            # Verifica se CCC está entre 0 e 30 dias, indicando alta eficiência
+            elif 0 <= ccc <= 30:
+                # Retorna ResultadoIND para alta eficiência
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='0 <= CCC <= 30 dias',
+                    descricao='O CCC é baixo, indicando alta eficiência na gestão do capital de giro. Comum em empresas com operações ágeis, como tecnologia ou bens de consumo, sugere rápida conversão de estoques e recebíveis em caixa, com boa gestão de pagamentos.',
+                    riscos='Risco de dependência de ciclos operacionais rápidos, que podem ser afetados por choques de mercado. Pode haver necessidade de monitoramento de estoques.',
+                    referencia='Compare com evaluate_liquidez_seca para liquidez, evaluate_margem_bruta para eficiência de custos e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Considere investir, mas monitore a consistência do ciclo operacional. Boa opção para investidores que buscam eficiência e liquidez.'
+                )
+            # Verifica se CCC está entre 30 e 60 dias, indicando eficiência moderada
+            elif 30 < ccc <= 60:
+                # Retorna ResultadoIND para eficiência moderada
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='30 < CCC <= 60 dias',
+                    descricao='O CCC está em uma faixa moderada, indicando eficiência razoável na gestão do capital de giro. Comum em setores como manufatura ou varejo, sugere capacidade de converter estoques e recebíveis em caixa, mas com espaço para melhorias na gestão operacional.',
+                    riscos='Risco de ineficiência em estoques ou atrasos em recebíveis, aumentando a necessidade de capital de giro. Pode haver vulnerabilidade a interrupções na cadeia de suprimentos.',
+                    referencia='Verifique evaluate_giro_ativo para eficiência, evaluate_liquidez_corrente para liquidez e evaluate_margem_liquida para lucratividade.',
+                    recomendacao='Considere investir com cautela, avaliando a gestão de estoques e recebíveis. Priorize empresas com estratégias de otimização do capital de giro.'
+                )
+            # Verifica se CCC está entre 60 e 90 dias, indicando baixa eficiência
+            elif 60 < ccc <= 90:
+                # Retorna ResultadoIND para baixa eficiência
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='60 < CCC <= 90 dias',
+                    descricao='O CCC é alto, indicando baixa eficiência na gestão do capital de giro. Comum em setores com estoques de baixa rotatividade, como indústria pesada, sugere demora na conversão de estoques e recebíveis em caixa, aumentando o risco de necessidade de financiamento.',
+                    riscos='Risco de dependência de capital de giro elevado ou dificuldades de liquidez. Pode haver estoques obsoletos ou atrasos em recebíveis.',
+                    referencia='Analise evaluate_liquidez_seca para liquidez, evaluate_margem_bruta para eficiência de custos e evaluate_debt_to_ebitda para alavancagem.',
+                    recomendacao='Evite investir a menos que haja planos claros de otimização do capital de giro. Monitore a gestão de estoques e recebíveis.'
+                )
+            # Verifica se CCC excede 90 dias, indicando ineficiência crítica
+            elif ccc > 90:
+                # Retorna ResultadoIND para ineficiência crítica
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='CCC > 90 dias',
+                    descricao='O CCC é extremamente alto, indicando ineficiência grave na gestão do capital de giro. Comum em empresas com problemas operacionais ou setores com baixa rotatividade, sugere dificuldades significativas em converter estoques e recebíveis em caixa, aumentando o risco financeiro.',
+                    riscos='Risco de insolvência, necessidade de financiamento constante ou problemas de liquidez. Pode haver estoques obsoletos ou má gestão de recebíveis.',
+                    referencia='Avalie evaluate_liquidez_corrente para liquidez, evaluate_cash_flow para geração de caixa e evaluate_debt_to_assets para alavancagem.',
+                    recomendacao='Evite investir devido ao alto risco de ineficiência operacional. Priorize análise de recuperação do capital de giro e estratégias de otimização.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar o Ciclo de Conversão de Caixa: {mensagem}.
+                Verifique os dados de entrada (Estoque Médio, Contas a Receber, Contas a Pagar, Custo dos Bens Vendidos, Receita Líquida) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
+
+
+# Define a classe LiquidezSecaEvaluator para avaliar o indicador Liquidez Seca
+class LiquidezSecaEvaluator:
+    # Construtor que inicializa definição, agrupador e descrição da Liquidez Seca
+    def __init__(self):
+        # Define string multilinha explicando o índice Liquidez Seca
+        self.definicao = '''
+        A Liquidez Seca mede a capacidade da empresa de cobrir suas obrigações de curto prazo (Passivo Circulante) utilizando apenas
+        os ativos circulantes mais líquidos, excluindo estoques, calculada como (Ativo Circulante - Estoques) / Passivo Circulante.
+        É um indicador conservador de liquidez de curto prazo que avalia a saúde financeira sem depender da conversão de estoques em caixa.
+        Valores altos sugerem robustez financeira, enquanto valores baixos indicam fragilidade em cenários de estresse.
+        '''
+        # Define a categoria de agrupamento como "Liquidez"
+        self.agrupador = 'Liquidez'
+        # Define a fórmula da Liquidez Seca
+        self.formula = 'Liquidez Seca = (Ativo Circulante - Estoques) / Passivo Circulante'
+
+    # Decorator para validar que os parâmetros são strings não vazias
+    def validar_strings(funcao):
+        def wrapper(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+            # Verifica se cada parâmetro é uma string não vazia
+            for param, nome in [
+                (classificacao, "classificacao"),
+                (faixa, "faixa"),
+                (descricao, "descricao"),
+                (riscos, "riscos"),
+                (referencia, "referencia"),
+                (recomendacao, "recomendacao")
+            ]:
+                if not isinstance(param, str) or not param.strip():
+                    raise ValueError(f"O parâmetro '{nome}' deve ser uma string não vazia.")
+            # Chama a função original com os parâmetros validados
+            return funcao(self, classificacao, faixa, descricao, riscos, referencia, recomendacao)
+        return wrapper
+
+    # Avalia o valor da Liquidez Seca e retorna um objeto ResultadoIND
+    def avaliar(self, ativo_circulante, estoques, passivo_circulante):
+        # Tenta processar os valores de Ativo Circulante, Estoques e Passivo Circulante
+        try:
+            # Verifica se as entradas são numéricas (int ou float) ou strings que podem ser convertidas
+            for param, nome in [
+                (ativo_circulante, "Ativo Circulante"),
+                (estoques, "Estoques"),
+                (passivo_circulante, "Passivo Circulante")
+            ]:
+                if not isinstance(param, (int, float)) and not (isinstance(param, str) and param.replace('.', '', 1).isdigit()):
+                    raise ValueError(f"O valor de {nome} deve ser numérico.")
+            # Converte Ativo Circulante, Estoques e Passivo Circulante para float
+            ativo_circulante = float(ativo_circulante)
+            estoques = float(estoques)
+            passivo_circulante = float(passivo_circulante)
+            # Calcula Liquidez Seca
+            if passivo_circulante == 0:
+                raise ValueError("O Passivo Circulante não pode ser zero para calcular a Liquidez Seca.")
+            liquidez_seca = (ativo_circulante - estoques) / passivo_circulante
+            # Verifica se Liquidez Seca é negativa, indicando insuficiência de ativos líquidos
+            if liquidez_seca < 0:
+                # Retorna ResultadoIND para Liquidez Seca negativa
+                return self.gerar_resultado(
+                    classificacao='Crítico',
+                    faixa='Liquidez Seca < 0',
+                    descricao='Uma Liquidez Seca negativa indica que os ativos circulantes, excluindo estoques, são insuficientes para cobrir o passivo circulante. Comum em empresas em crise ou com má gestão de liquidez, sugere alto risco de insolvência e dependência de estoques.',
+                    riscos='Risco de falência, atrasos em pagamentos ou necessidade de financiamento emergencial. Pode haver baixa conversibilidade de ativos em caixa.',
+                    referencia='Analise evaluate_liquidez_corrente para liquidez geral, evaluate_disponibilidades para liquidez imediata e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Evite investir até que a empresa demonstre recuperação da liquidez. Priorize análise de fluxo de caixa e estratégias de reestruturação.'
+                )
+            # Verifica se Liquidez Seca está entre 0 e 0.5, indicando liquidez muito baixa
+            elif 0 <= liquidez_seca < 0.5:
+                # Retorna ResultadoIND para liquidez muito baixa
+                return self.gerar_resultado(
+                    classificacao='Baixo',
+                    faixa='0 <= Liquidez Seca < 0.5',
+                    descricao='A Liquidez Seca é muito baixa, indicando capacidade limitada de cobrir o passivo circulante sem depender de estoques. Comum em setores com estoques de baixa liquidez, como manufatura pesada, sugere risco financeiro em cenários de estresse.',
+                    riscos='Risco de dificuldades financeiras se os estoques não forem convertidos em caixa. Pode haver dependência de vendas ou financiamentos de curto prazo.',
+                    referencia='Compare com evaluate_liquidez_corrente para liquidez geral, evaluate_cash_conversion_cycle para eficiência e evaluate_debt_to_assets para alavancagem.',
+                    recomendacao='Considere investir com cautela, avaliando a qualidade dos estoques e a gestão de caixa. Priorize empresas com forte geração de caixa.'
+                )
+            # Verifica se Liquidez Seca está entre 0.5 e 1, indicando liquidez moderada
+            elif 0.5 <= liquidez_seca <= 1:
+                # Retorna ResultadoIND para liquidez moderada
+                return self.gerar_resultado(
+                    classificacao='Moderado',
+                    faixa='0.5 <= Liquidez Seca <= 1',
+                    descricao='A Liquidez Seca cobre parcialmente ou totalmente o passivo circulante, indicando liquidez moderada. Comum em empresas estáveis, como varejo ou serviços, sugere capacidade de honrar obrigações de curto prazo, mas com dependência limitada de estoques.',
+                    riscos='Risco de dificuldades em cenários de estresse, especialmente se os recebíveis forem de baixa qualidade. Pode haver necessidade de gestão rigorosa de caixa.',
+                    referencia='Verifique evaluate_disponibilidades para liquidez imediata, evaluate_margem_liquida para lucratividade e evaluate_cash_flow para geração de caixa.',
+                    recomendacao='Considere investir, mas avalie a qualidade dos ativos circulantes e a consistência do fluxo de caixa. Boa opção para investidores que buscam estabilidade.'
+                )
+            # Verifica se Liquidez Seca está entre 1 e 1.5, indicando boa liquidez
+            elif 1 < liquidez_seca <= 1.5:
+                # Retorna ResultadoIND para boa liquidez
+                return self.gerar_resultado(
+                    classificacao='Bom',
+                    faixa='1 < Liquidez Seca <= 1.5',
+                    descricao='A Liquidez Seca é alta, indicando boa capacidade de cobrir o passivo circulante sem depender de estoques. Comum em empresas com gestão financeira sólida, como tecnologia ou bens de consumo, sugere robustez financeira e resistência a imprevistos.',
+                    riscos='Risco de ativos circulantes ociosos, como excesso de caixa ou recebíveis de longo prazo. Pode haver ineficiência na alocação de recursos.',
+                    referencia='Combine com evaluate_liquidez_corrente para liquidez geral, evaluate_cash_conversion_cycle para eficiência e evaluate_roe para rentabilidade.',
+                    recomendacao='Considere investir, mas monitore a eficiência na gestão de ativos circulantes. Boa opção para investidores que buscam segurança financeira.'
+                )
+            # Verifica se Liquidez Seca excede 1.5, indicando liquidez excepcional
+            elif liquidez_seca > 1.5:
+                # Retorna ResultadoIND para liquidez excepcional
+                return self.gerar_resultado(
+                    classificacao='Ótimo',
+                    faixa='Liquidez Seca > 1.5',
+                    descricao='A Liquidez Seca é extremamente alta, indicando capacidade excepcional de cobrir o passivo circulante sem depender de estoques. Típico de empresas com forte geração de caixa, como software ou serviços, sugere robustez financeira e alta resistência a choques.',
+                    riscos='Risco de ineficiência no uso de ativos líquidos, com excesso de caixa ocioso. Pode haver perda de oportunidades de investimento ou retorno aos acionistas.',
+                    referencia='Combine com evaluate_disponibilidades para liquidez imediata, evaluate_cash_flow para geração de caixa e evaluate_psr para valuation.',
+                    recomendacao='Invista se os fundamentos suportarem a robustez financeira, mas verifique a eficiência na alocação de recursos. Considere empresas com planos de reinvestimento.'
+                )
+        # Captura exceções para entradas inválidas (ex.: não numéricas)
+        except Exception as e:
+            # Retorna ResultadoIND com mensagem de erro
+            return self._erro(mensagem=str(e))
+
+    # Cria objeto ResultadoIND com os parâmetros fornecidos
+    @validar_strings
+    def gerar_resultado(self, classificacao, faixa, descricao, riscos, referencia, recomendacao):
+        # Instancia e retorna ResultadoIND com atributos da instância
+        return ResultadoIND(
+            classificacao=classificacao,
+            faixa=faixa,
+            descricao=descricao,
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos=riscos,
+            referencia_cruzada=referencia,
+            recomendacao=recomendacao
+        )
+
+    # Trata erros criando um ResultadoIND de erro
+    def _erro(self, mensagem):
+        # Retorna ResultadoIND com detalhes de erro
+        return ResultadoIND(
+            classificacao='Erro',
+            faixa='N/A',
+            descricao=f'''
+                Ocorreu um erro ao processar a Liquidez Seca: {mensagem}.
+                Verifique os dados de entrada (Ativo Circulante, Estoques e Passivo Circulante) e assegure que sejam numéricos válidos.
+            ''',
+            definicao=self.definicao,
+            agrupador=self.agrupador,
+            formula=self.formula,
+            riscos='N/A',
+            referencia_cruzada='N/A',
+            recomendacao='N/A'
+        )
 # Define a classe LucroLiquidoEvaluator para avaliar o indicador Lucro Líquido
 class LucroLiquidoEvaluator:
     # Construtor que inicializa definição, agrupador e descrição do Lucro Líquido
