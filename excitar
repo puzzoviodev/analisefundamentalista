@@ -1,0 +1,19 @@
+# 1) Ambiente
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# Linux/macOS: source .venv/bin/activate
+
+# 2) Dependências
+pip install django pandas openpyxl xlrd
+
+# 3) Migrations
+python manage.py makemigrations
+python manage.py migrate
+
+# 4) Importar seus dados (CSV ou XLSX)
+#    Colunas esperadas: Agrupador, Fonte, Ativo, Indicador, Formula,
+#    Definicao, Referencia, Valor, Classificacao, Faixa, Descricao
+python manage.py importar_dados --arquivo dados.xlsx      # ou dados.csv
+
+# 5) Subir o servidor
+python manage.py runserver
