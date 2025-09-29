@@ -1,0 +1,22 @@
+django_static2dynamic_skeleton/
+├─ manage.py
+├─ project/ (settings, urls, wsgi)
+├─ core/
+│  ├─ models.py           # Tabela IndicatorRecord
+│  ├─ views.py            # /api/dataset e /page/<slug>/
+│  ├─ admin.py
+│  └─ management/commands/importar_dados.py
+├─ templates/user_pages/
+│  ├─ hf04_filter_modal.html
+│  ├─ hf07_filter_quickstats.html
+│  ├─ hm01_basic.html
+│  └─ (inclui também as 3 anteriores: ex2, hf01, hf02)
+└─ static/
+   ├─ css/app.css
+   └─ js/
+      ├─ dataset-loader.js
+      └─ pages/
+         ├─ hf04_filter_modal.js
+         ├─ hf07_filter_quickstats.js
+         ├─ hm01_basic.js
+         └─ (ex2_cards_grid.js, hf01_togglecard.js, hf02_button_details.js)
